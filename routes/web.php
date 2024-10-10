@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,5 +30,7 @@ Route::middleware(['auth', 'role:user'])->group(function(){
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{id}/books', [BookController::class, 'index']);
 
+require __DIR__.'/auth.php';
