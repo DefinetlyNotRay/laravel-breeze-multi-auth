@@ -76,12 +76,33 @@
             @endif
         </nav>
         <main>
-            <div class="flex justify-center w-screen mt-5 >
-                <div class="">
-                    <div class="w-[95%]">
-                        <div class="bg-[#222222] h-[45vh] pt-4">
-                            <div class="text-lg font-extrabold text-center text-white">RENT YOUR FAVORITES BOOKS HERE!!</div>
+            <div class="flex justify-center w-screen mt-5 "">
+                    <div class="w-[95%] ">
+                        <div class="bg-[#222222] rounded-xl h-[45vh] pt-10">
+                            <div class="text-2xl font-bold text-center text-white">RENT YOUR FAVORITES BOOKS HERE!!</div>
                             <div class="flex justify-center mt-5"><img class="w-[80%]" src="https://utfs.io/f/u1nbYPCUJps7fsbQCukatcBhTPXOqkG2Jv8VgKxH3lRL9Qbd" alt=""></div>
+                        </div>
+                    <div class="mt-32 w-[78%] mx-auto">
+                        <div class="">
+                           <p class="text-xl font-medium ">Book Category</p>     
+                           <div class="flex items-center justify-between">
+                            <div class=""                            >
+                                <img src="https://utfs.io/f/u1nbYPCUJps7WDSnQVbzHdUJ9iauIw2hvXEAD0Tj7Wn5oKQF"  style="width:248px; height:218px !important;"alt="">
+                                <p class="mt-2 text-lg font-bold text-center">Fantasy</p>
+                            </div>
+                            <div class="">                           
+                                 <img src="https://utfs.io/f/u1nbYPCUJps7rgiYIStxvZQjXVd2zOB0hag9nsUYrfRcw8kT" style="width:248px; height:218px !important;" alt="">
+                                 <p class="mt-2 text-lg font-bold text-center">Romance</p>
+                            </div>
+                            <div class="">                            
+                                <img src="https://utfs.io/f/u1nbYPCUJps7Gols5QWzKnhudLeOxWvRkZMisaw6r9NmPC7D" style="width:248px; height:218px !important;" alt="">
+                                <p class="mt-2 text-lg font-bold text-center">Self Improvements</p>
+                            </div>
+                            <div class="">                            
+                                <img src="https://utfs.io/f/u1nbYPCUJps7qbstc9sGMCBRSKIbNUTohpu7Jv8i39aOLxZX" style="width:248px; height:218px !important;" class="" alt="">
+                                <p class="mt-2 text-lg font-bold text-center ">Science Fiction</p>
+                            </div>
+                           </div>
                         </div>
                     </div>
                 </div>
