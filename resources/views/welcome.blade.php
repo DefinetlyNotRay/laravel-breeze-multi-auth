@@ -84,28 +84,28 @@
                         </div>
                     <div class="mt-32 w-[78%] mx-auto">
                         <div class="">
-                           <p class="text-xl font-medium ">Book Category</p>     
+                           <p class="mb-5 text-xl font-medium">Book Category</p>     
                            <div class="flex items-center justify-between">
                             <div class="" >
-                                <a href="/books/{{'fantasy'}}" class="">
+                                <a href="/books?category='{{'fantasy'}}'" class="">
                                     <img src="https://utfs.io/f/u1nbYPCUJps7WDSnQVbzHdUJ9iauIw2hvXEAD0Tj7Wn5oKQF"  style="width:248px; height:218px !important;"alt="">
                                 </a>
                                 <p class="mt-2 text-lg font-bold text-center">Fantasy</p>
                             </div>
                             <div class="">               
-                                <a href="/books/{{'romance'}}" class="">            
+                                <a href="/books?category='{{'romance'}}'" class="">            
                                  <img src="https://utfs.io/f/u1nbYPCUJps7rgiYIStxvZQjXVd2zOB0hag9nsUYrfRcw8kT" style="width:248px; height:218px !important;" alt="">
                                 </a>
                                  <p class="mt-2 text-lg font-bold text-center">Romance</p>
                             </div>
                             <div class="">   
-                                <a href="/books/{{'self-improvement'}}" class="">            
+                                <a href="/books?category='{{'self-improvement'}}'" class="">            
                                     <img src="https://utfs.io/f/u1nbYPCUJps7Gols5QWzKnhudLeOxWvRkZMisaw6r9NmPC7D" style="width:248px; height:218px !important;" alt="">
                                 </a>                         
                                 <p class="mt-2 text-lg font-bold text-center">Self Improvements</p>
                             </div>
                             <div class="">        
-                                <a href="/books/{{'science-fiction'}}" class="">
+                                <a href="/books?category='{{'science-fiction'}}'" class="">
                                     <img src="https://utfs.io/f/u1nbYPCUJps7qbstc9sGMCBRSKIbNUTohpu7Jv8i39aOLxZX" style="width:248px; height:218px !important;" class="" alt="">
                                 </a>                    
                                 <p class="mt-2 text-lg font-bold text-center ">Science Fiction</p>
@@ -118,15 +118,14 @@
         </main>
         <style>
             .active::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -4px; /* Adjust as needed */
-    width: 100%;
-    height: 2px; /* Thickness of the underline */
-    background-color: black; /* Color of the underline */
-}
-
+                content: '';
+                position: absolute;
+                left:  0;
+                bottom: -4px; /* Adjust as needed */
+                width: 100%;
+                height: 2px; /* Thickness of the underline */
+                background-color: black; /* Color of the underline */
+            }
         </style>
         
         
