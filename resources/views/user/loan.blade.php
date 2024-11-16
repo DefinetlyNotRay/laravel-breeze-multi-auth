@@ -33,7 +33,7 @@
 
                 <div class="relative">
 
-                    <a href="/" class="mx-auto font-bold text-center text-gray-800 text-md  hover:text-gray-900">
+                    <a href="/" class="mx-auto font-bold text-center text-gray-800 text-md hover:text-gray-900">
                         Home
                     </a>
                 </div>
@@ -83,24 +83,10 @@
                 <div class="w-[95%]">
                     <p class="text-2xl font-bold">Explore Books!</p>
                     
-                    <div class="" id="bookContainer">
-                        <h2>Currently Loaning</h2>
-                        <ul>
+                    <div class="flex flex-col items-center justify-center">
+                        <h2 class="text-lg font-bold">Currently Loaning</h2>
+                        <ul class="flex gap-5">
                             @foreach ($currentlyLoaning as $loan)
-                                <li>{{ $loan->book->title }} - Due: {{ $loan->tanggal_tenggat }}</li>
-                            @endforeach
-                        </ul>
-
-                        <h2>Past Loans</h2>
-                        <ul>
-                            @foreach ($returnedBooks as $loan)
-                                <li>{{ $loan->book->title }} - Returned: {{ $loan->returns->tanggal_pengembalian }}</li>
-                            @endforeach
-                        </ul>
-
-                        <h2>Waiting to Be Picked Up</h2>
-                        <ul>
-                            @foreach ($waitingToBePickedUp as $loan)
                             <a href="/loan/{{$loan->book->id}}">
 
                                 <img 
@@ -109,12 +95,59 @@
                                     alt="">
                             </a>
                             <div>
-                                <p class="font-bold text-sm">{{ $loan->book->title}}</p>
-                                <p class="text-xs opacity-70 font-semibold">{{$loan->book->author}}</p>
-                                <p class="text-xs opacity-70 font-semibold">Reserved on: {{$loan->tanggal_pinjam}}</p>
-                            </div>
+                                <p class="text-sm font-bold">{{ $loan->book->title}}</p>
+                                <p class="text-xs font-semibold opacity-70">{{$loan->book->author}}</p>
+                                <p class="text-xs font-semibold opacity-70">Loan Date: {{$loan->tanggal_pinjam}}</p>
+                                <p class="text-xs font-semibold opacity-70">Due Date: {{$loan->tanggal_tenggat}}</p>
+                            </div>                            
                             @endforeach
                         </ul>
+                        <div class="flex justify-center gap-20">
+                            <div class="flex flex-col gap-2">
+                                <h2 class="text-lg font-semibold">Past Loans</h2>
+                                <ul class="flex gap-5 min-w-[640px]">
+                                    @foreach ($returnedBooks as $loan)
+                                    <div class="flex flex-col">
+                                        <a href="/loan/{{$loan->book->id}}">
+            
+                                            <img 
+                                                src="{{$loan->book->cover_img}}" 
+                                                class="w-[200px] h-[300px] object-cover" 
+                                                alt="">
+                                        </a>
+                                        <div>
+                                            <p class="text-sm font-bold">{{ $loan->book->title}}</p>
+                                            <p class="text-xs font-semibold opacity-70">{{$loan->book->author}}</p>
+                                            <p class="text-xs font-semibold opacity-70">Loan Date: {{$loan->tanggal_pinjam}}</p>
+                                            <p class="text-xs font-semibold opacity-70">Due Date: {{$loan->tanggal_tenggat}}</p>
+                                            <p class="text-xs font-semibold opacity-70">Return Date: {{$loan->returns->tanggal_pengembalian}}</p>
+                                        </div>                           
+                                    </div>
+                                     @endforeach
+                                </ul>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <h2 class="text-lg font-semibold">Waiting to Be Picked Up</h2>
+                                <ul class="grid grid-cols-3 gap-5 min-w-[640px]">
+                                    @foreach ($waitingToBePickedUp as $loan)
+                                    <div class="flex flex-col">
+                                        <a href="/loan/{{$loan->book->id}}">
+            
+                                            <img 
+                                                src="{{$loan->book->cover_img}}" 
+                                                class="w-[200px] h-[300px] object-cover" 
+                                                alt="">
+                                        </a>
+                                        <div>
+                                            <p class="text-sm font-bold">{{ $loan->book->title}}</p>
+                                            <p class="text-xs font-semibold opacity-70">{{$loan->book->author}}</p>
+                                            <p class="text-xs font-semibold opacity-70">Reserved on: {{$loan->tanggal_pinjam}}</p>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
