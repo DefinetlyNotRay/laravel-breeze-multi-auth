@@ -33,13 +33,13 @@
 
                 <div class="relative">
 
-                    <a href="/" class="mx-auto font-bold text-center text-gray-800 text-md active hover:text-gray-900">
+                    <a href="/" class="mx-auto font-bold text-center text-gray-800 text-md  hover:text-gray-900">
                         Home
                     </a>
                 </div>
                 <div class="relative">
 
-                <a href="/loans" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                <a href="/loans" class="mx-auto font-bold text-gray-800 text-md active hover:text-gray-800/70 hover:text-gray-900">
                     Loans
                 </a>                
             </div>
@@ -79,42 +79,42 @@
             @endif
         </nav>
         <main>
-            <div class="flex justify-center mb-5 mt-5 "">
-                    <div class="w-[95%] ">
-                        <div class="bg-[#222222] rounded-xl h-[45vh] pt-10">
-                            <div class="text-2xl font-bold text-center text-white">RENT YOUR FAVORITES BOOKS HERE!!</div>
-                            <div class="flex justify-center mt-5"><img class="w-[80%]" src="https://utfs.io/f/u1nbYPCUJps7fsbQCukatcBhTPXOqkG2Jv8VgKxH3lRL9Qbd" alt=""></div>
-                        </div>
-                    <div class="mt-32 w-[78%] mx-auto">
-                        <div class="">
-                           <p class="mb-5 text-xl font-medium">Book Category</p>     
-                           <div class="flex items-center justify-between">
-                            <div class="" >
-                                <a href="/books?category='{{'Fantasy'}}'" class="">
-                                    <img src="https://utfs.io/f/u1nbYPCUJps7WDSnQVbzHdUJ9iauIw2hvXEAD0Tj7Wn5oKQF"  style="width:248px; height:218px !important;"alt="">
-                                </a>
-                                <p class="mt-2 text-lg font-bold text-center">Fantasy</p>
+            <div class="flex justify-center mt-5">
+                <div class="w-[95%]">
+                    <p class="text-2xl font-bold">Explore Books!</p>
+                    
+                    <div class="" id="bookContainer">
+                        <h2>Currently Loaning</h2>
+                        <ul>
+                            @foreach ($currentlyLoaning as $loan)
+                                <li>{{ $loan->book->title }} - Due: {{ $loan->tanggal_tenggat }}</li>
+                            @endforeach
+                        </ul>
+
+                        <h2>Past Loans</h2>
+                        <ul>
+                            @foreach ($returnedBooks as $loan)
+                                <li>{{ $loan->book->title }} - Returned: {{ $loan->returns->tanggal_pengembalian }}</li>
+                            @endforeach
+                        </ul>
+
+                        <h2>Waiting to Be Picked Up</h2>
+                        <ul>
+                            @foreach ($waitingToBePickedUp as $loan)
+                            <a href="/loan/{{$loan->book->id}}">
+
+                                <img 
+                                    src="{{$loan->book->cover_img}}" 
+                                    class="w-[200px] h-[300px] object-cover" 
+                                    alt="">
+                            </a>
+                            <div>
+                                <p class="font-bold text-sm">{{ $loan->book->title}}</p>
+                                <p class="text-xs opacity-70 font-semibold">{{$loan->book->author}}</p>
+                                <p class="text-xs opacity-70 font-semibold">Reserved on: {{$loan->tanggal_pinjam}}</p>
                             </div>
-                            <div class="">               
-                                <a href="/books?category='{{'Romance'}}'" class="">            
-                                 <img src="https://utfs.io/f/u1nbYPCUJps7rgiYIStxvZQjXVd2zOB0hag9nsUYrfRcw8kT" style="width:248px; height:218px !important;" alt="">
-                                </a>
-                                 <p class="mt-2 text-lg font-bold text-center">Romance</p>
-                            </div>
-                            <div class="">   
-                                <a href="/books?category='{{'Self-Improvement'}}'" class="">            
-                                    <img src="https://utfs.io/f/u1nbYPCUJps7Gols5QWzKnhudLeOxWvRkZMisaw6r9NmPC7D" style="width:248px; height:218px !important;" alt="">
-                                </a>                         
-                                <p class="mt-2 text-lg font-bold text-center">Self Improvements</p>
-                            </div>
-                            <div class="">        
-                                <a href="/books?category='{{'Science-Fiction'}}'" class="">
-                                    <img src="https://utfs.io/f/u1nbYPCUJps7qbstc9sGMCBRSKIbNUTohpu7Jv8i39aOLxZX" style="width:248px; height:218px !important;" class="" alt="">
-                                </a>                    
-                                <p class="mt-2 text-lg font-bold text-center ">Science Fiction</p>
-                            </div>
-                           </div>
-                        </div>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>

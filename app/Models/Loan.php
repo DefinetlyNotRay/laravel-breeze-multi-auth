@@ -16,16 +16,38 @@ class Loan extends Model
         "id_buku",
         "tanggal_pinjam",
         "tanggal_tenggat",
-        "tanggal_pengembalian",
-        "denda",
-        "keadaan"
+        "status"
     ];
     public function user()
-    {
-        return $this->belongsTo(User::class, 'id_user');
-    }
-    public function book()
-    {
-        return $this->belongsTo(Book::class, 'id_buku');
-    }
+{
+    return $this->belongsTo(User::class, 'id_user');
+}
+
+public function book()
+{
+    return $this->belongsTo(Book::class, 'id_buku');
+}
+
+public function returns()
+{
+    return $this->hasOne(ReturnModel::class, 'id_loan');
+}
+public function scopeCurrentlyLoaning($query, $userId)
+{
+    return $query->where('id_user', $userId)
+                 ->where('status', 'picked up');
+}
+
+public function scopeReturned($query, $userId)
+{
+    return $query->where('id_user', $userId)
+                 ->where('status', 'returned');
+}
+
+public function scopeWaitingToBePickedUp($query, $userId)
+{
+    return $query->where('id_user', $userId)
+                 ->where('status', 'reserved');
+}
+
 }

@@ -9,15 +9,21 @@ class Book extends Model
 {
     use HasFactory;
     protected $table = "books";
+    protected $primaryKey="id";
     protected $fillable= [
         "id",
         "title",
         "author",
         "id_category",
-        "status"
+        "status",
+        "cover_img"
     ];
     public function category()
     {
         return $this->belongsTo(Category::class, 'id_category');
     }
+    public function loans()
+{
+    return $this->hasMany(Loan::class, 'id_buku');
+}
 }
