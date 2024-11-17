@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
+use App\Models\Loan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -13,6 +16,9 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
-        return view('admin.dashboard');
+        $user = Auth::user();
+        $book = Book::get();
+        $loan = Loan::get();
+        return view('admin.dashboard', compact('user', 'book', 'loan'));
     }
 }

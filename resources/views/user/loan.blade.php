@@ -85,6 +85,7 @@
                     
                     <div class="flex flex-col items-center justify-center">
                         <h2 class="text-lg font-bold">Currently Loaning</h2>
+                        @if($currentlyLoaning->isNotEmpty())
                         <ul class="flex gap-5">
                             @foreach ($currentlyLoaning as $loan)
                             <a href="/loan/{{$loan->book->id}}">
@@ -101,11 +102,19 @@
                                 <p class="text-xs font-semibold opacity-70">Due Date: {{$loan->tanggal_tenggat}}</p>
                             </div>                            
                             @endforeach
+
                         </ul>
+                        @else
+                        <div class="min-h-[352px] h-full flex flex-col justify-center items-center"> 
+
+                            <p>No loans</p>
+                        </div>
+                        @endif
                         <div class="flex justify-center gap-20">
                             <div class="flex flex-col gap-2">
                                 <h2 class="text-lg font-semibold">Past Loans</h2>
-                                <ul class="flex gap-5 min-w-[640px]">
+                                @if($returnedBooks->isNotEmpty())
+                                <ul class="grid grid-cols-3 gap-5 min-w-[640px]">
                                     @foreach ($returnedBooks as $loan)
                                     <div class="flex flex-col">
                                         <a href="/loan/{{$loan->book->id}}">
@@ -125,6 +134,12 @@
                                     </div>
                                      @endforeach
                                 </ul>
+                                @else
+                                <div class="min-w-[640px] h-full flex flex-col justify-center items-center">
+
+                                    <p>No returned books</p>
+                                </div>
+                                @endif
                             </div>
                             <div class="flex flex-col gap-2">
                                 <h2 class="text-lg font-semibold">Waiting to Be Picked Up</h2>

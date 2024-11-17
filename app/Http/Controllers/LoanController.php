@@ -21,12 +21,20 @@ class LoanController extends Controller
     }
     public function loan(Request $request, $id){ 
         $user = Auth::user();
+         // Check if the user already has 3 or more books loaned
+        $currentLoans = Loan::where('id_user', $user->id)
+        ->whereIn('status', ['reserved', 'picked up']) // Active loan statuses
+        ->count();
+
+        if ($currentLoans >= 3) {
+            return redirect("/books")->withErrors('You cannot borrow more than 3 books at a time.');
+        }
         Loan::create([
             'id_user' => $user->id,
             'id_buku' => $id,
             'tanggal_pinjam' => date('Y-m-d'),
             "tanggal_tenggat" => "00-00-0000",
-            'status' => "Waiting"
+            'status' => "reserved"
         ]);
         Book::where('id', $id)->update(['status' => 'Unavailable']);
         return redirect("/books")->withMessage('Loan successfully requested!');

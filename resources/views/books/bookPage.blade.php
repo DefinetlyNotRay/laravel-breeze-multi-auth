@@ -29,7 +29,7 @@
 
                 <div class="relative">
 
-                    <a href="/" class="mx-auto font-bold text-center text-gray-800 text-md  hover:text-gray-900">
+                    <a href="/" class="mx-auto font-bold text-center text-gray-800 text-md hover:text-gray-900">
                         Home
                     </a>
                 </div>
@@ -75,17 +75,18 @@
             @endif
         </nav>
         <main>
+            
             <div class="flex justify-center gap-10 items-center h-[80vh]">
                 <img class="max-w-[340px]" src="{{$books->cover_img}}" alt="">
                 <div class="max-w-[80ch] h-full flex flex-col justify-center">
 
-                    <p class="font-bold text-xl">{{$books->title}}</p>
-                    <p class="font-semibold text-sm">{{$books->author}}</p>
+                    <p class="text-xl font-bold">{{$books->title}}</p>
+                    <p class="text-sm font-semibold">{{$books->author}}</p>
                     <p class="font-bold">{{$books->category->nama_category}}</p>
                     <p class="text-sm">{{$books->desc   }}</p>
                     @if($books->status == 'Available')
                     <!-- Tombol Loan -->
-                    <form action="/loans/{{$books->id}}" method="POST">
+                    <form action="{{ route('loans.loan', ['id' => $books->id]) }}" method="POST">
                         @csrf
 
                         <input type="submit" class="text-xs mt-2 bg-[#01B14B] w-full text-center text-white hover:bg-[#01B14B]/70 transition-all duration-300 py-1 px-4" placeholder="Loan" />
@@ -93,7 +94,7 @@
                     </form>
                     @else
                     <!-- Tombol Tidak Aktif -->
-                    <button disabled class="text-xs mt-2 bg-gray-400 w-full text-center text-white py-1 px-4 cursor-not-allowed">
+                    <button disabled class="w-full px-4 py-1 mt-2 text-xs text-center text-white bg-gray-400 cursor-not-allowed">
                         Unavailable
                     </button>
                     @endif
