@@ -34,7 +34,7 @@
                 <div class="relative">
 
                     <a href="/" class="mx-auto font-bold text-center text-gray-800 text-md active hover:text-gray-900">
-                        Home
+                        Dashboard
                     </a>
                 </div>
                 <div class="relative">
@@ -81,7 +81,129 @@
         <main>
             <div class="flex justify-center mt-5 mb-5 "">
                 <div class="w-[95%] ">
-                        
+                     <div class="flex">
+                        <div class="flex flex-col items-start w-full">
+                            <div class="flex gap-10">
+                                <div class="">
+                                    <h2 class="text-xl font-bold">Book Loaned</h2>
+                                    <div class="bg-[#222222] shadow-2xl text-white p-5 w-[24rem] text-3xl py-14 rounded-md font-semibold">
+                                        <p>50 Books</p>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <h2 class="text-xl font-bold">Book Returned</h2>
+                                    <div class="bg-[#222222] shadow-2xl text-white p-5 w-[24rem] text-3xl py-14 rounded-md font-semibold">
+                                        <p>50 Books</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-5">
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-3xl font-bold">Books</p>
+                                    <input class="w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-8" type="text" placeholder="Search"> 
+                                </div>
+                                
+                                <div class="py-4 overflow-x-auto">
+                                    <table class="border-collapse table-auto w-[808px]">
+                                        <thead class="text-white border border-black bg-[#2D2D2D]">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Book Name</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Author</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Status</th>
+                                                <th class="px-4 py-2 text-left border-black border-3">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Example Row 1 -->
+                                            <tr class="border border-b border-black hover:bg-gray-100">
+                                                <td class="px-4 py-2 text-center border-r border-black center col-2">1</td>
+                                                <td class="px-4 py-2 border-r border-black" colspan="2">The Great Gatsby</td>
+                                                <td class="px-4 py-2 border-r border-black">F. Scott Fitzgerald</td>
+                                                <td class="px-4 py-2 border-r border-black">Available</td>
+                                                <td class="px-4 py-2 border-black">
+                                                    <button class="">Returned</button>
+                                                </td>
+                                            </tr>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                            </div>    
+                        </div>
+                        <div class="">
+                            <div class="">
+                                <div class="flex items-end justify-between">
+                                    <p class="text-3xl font-bold">Loaned Books</p>
+                                    <input class="w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" type="text" placeholder="Search"> 
+                                </div>
+                                <div class="py-4 overflow-x-auto">
+                                    <table class="border-collapse table-auto w-[808px]">
+                                        <thead class="text-white border border-black bg-[#2D2D2D]">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Book Name</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">User</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Loaned Date</th>
+                                                <th class="px-4 py-2 text-left border-black border-3">Due Date</th>
+                                                <th class="px-4 py-2 text-left border-black border-3">Action</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Example Row 1 -->
+                                            <tr class="border border-b border-black hover:bg-gray-100">
+                                                <td class="px-4 py-2 text-center border-r border-black center col-2">1</td>
+                                                <td class="px-4 py-2 border-r border-black" colspan="2">The Great Gatsby</td>
+                                                <td class="px-4 py-2 border-r border-black">F. Scott Fitzgerald</td>
+                                                <td class="px-4 py-2 border-r border-black">Available</td>
+                                                <td class="px-4 py-2 border-r border-black">Available</td>
+                                                <td class="px-4 py-2 border-black">
+                                                    <button class="">Returned</button>
+                                                </td>
+                                            </tr>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="flex items-end justify-between">
+                                    <p class="text-3xl font-bold">Waitlisted Books</p>
+                                    <input class="w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" type="text" placeholder="Search"> 
+                                </div>
+                                <div class="py-4 overflow-x-auto">
+                                    <table class="border-collapse table-auto w-[808px]">
+                                        <thead class="text-white border border-black bg-[#2D2D2D]">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
+                                                <th class="px-4 py-2 text-left"colspan="2">Book Name</th>
+                                                <th class="border-r border-black border-3"></th>
+
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">User</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Loaned Date</th>
+                                                <th class="px-4 py-2 text-left border-black border-3">Due Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Example Row 1 -->
+                                            <tr class="border border-b border-black hover:bg-gray-100">
+                                                <td class="px-4 py-2 text-center border-r border-black center col-2">1</td>
+                                                <td class="px-4 py-2 border-black" colspan="2">The Great Gatsby</td>
+                                                <td class="px-4 py-2 border-r border-black"></td>
+
+                                                <td class="px-4 py-2 border-r border-black">F. Scott Fitzgerald</td>
+                                                <td class="px-4 py-2 border-r border-black">Available</td>
+                                              
+                                            </tr>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>    
+                        </div>   
+                     </div>   
                 </div>
             </div>
         </main>
