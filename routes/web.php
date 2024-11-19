@@ -13,9 +13,7 @@ use App\Http\Controllers\CategoryController;
 
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -40,7 +38,9 @@ Route::middleware('auth')->group(function () {
     });
 // });
 Route::middleware(['auth', 'role:admin'])->group(function(){
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get( '/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::post( '/pickedup/{id}', [AdminController::class, 'pickedup']);
+    Route::get('/return/{id}',[AdminController::class, 'returnPage']);
 });
 
 
