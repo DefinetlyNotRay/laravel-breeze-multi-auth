@@ -18,7 +18,9 @@ class AdminController extends Controller
     {
         $user = Auth::user();
         $book = Book::get();
-        $loan = Loan::get();
-        return view('admin.dashboard', compact('user', 'book', 'loan'));
+        $loan = Loan::Loaning()->with('book')->get();
+        $loanWait = Loan::Wait()->with('book')->get();
+
+        return view('admin.dashboard', compact('user', 'book', 'loan','loanWait'));
     }
 }

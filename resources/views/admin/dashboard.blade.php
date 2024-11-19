@@ -103,8 +103,8 @@
                                     <input class="w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-8" type="text" placeholder="Search"> 
                                 </div>
                                 
-                                <div class="py-4 overflow-x-auto">
-                                    <table class="border-collapse table-auto w-[808px]">
+                                <div class="py-4 overflow-x-auto overflow-y-scroll max-h-[38rem]">
+                                    <table class="border-collapse table-auto  w-[808px]">
                                         <thead class="text-white border border-black bg-[#2D2D2D]">
                                             <tr>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
@@ -115,17 +115,20 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Example Row 1 -->
+                                            @php
+                                                $no = 1
+                                            @endphp
+                                            @foreach($book as $books)
                                             <tr class="border border-b border-black hover:bg-gray-100">
-                                                <td class="px-4 py-2 text-center border-r border-black center col-2">1</td>
-                                                <td class="px-4 py-2 border-r border-black" colspan="2">The Great Gatsby</td>
-                                                <td class="px-4 py-2 border-r border-black">F. Scott Fitzgerald</td>
-                                                <td class="px-4 py-2 border-r border-black">Available</td>
+                                                <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
+                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$books->title}}</td>
+                                                <td class="px-4 py-2 border-r border-black">{{$books->author}}</td>
+                                                <td class="px-4 py-2 border-r border-black">{{$books->status}}</td>
                                                 <td class="px-4 py-2 border-black">
-                                                    <button class="">Returned</button>
+                                                    <button class="">Edit</button>
                                                 </td>
                                             </tr>
-                                            
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -138,8 +141,8 @@
                                     <p class="text-3xl font-bold">Loaned Books</p>
                                     <input class="w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" type="text" placeholder="Search"> 
                                 </div>
-                                <div class="py-4 overflow-x-auto">
-                                    <table class="border-collapse table-auto w-[808px]">
+                                <div class="py-4 overflow-x-auto ">
+                                    <table class="border-collapse table-auto  w-[808px]">
                                         <thead class="text-white border border-black bg-[#2D2D2D]">
                                             <tr>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
@@ -153,16 +156,18 @@
                                         </thead>
                                         <tbody>
                                             <!-- Example Row 1 -->
+                                            @foreach($loan as $loans)
                                             <tr class="border border-b border-black hover:bg-gray-100">
                                                 <td class="px-4 py-2 text-center border-r border-black center col-2">1</td>
-                                                <td class="px-4 py-2 border-r border-black" colspan="2">The Great Gatsby</td>
-                                                <td class="px-4 py-2 border-r border-black">F. Scott Fitzgerald</td>
-                                                <td class="px-4 py-2 border-r border-black">Available</td>
-                                                <td class="px-4 py-2 border-r border-black">Available</td>
+                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$loans->book->title}}</td>
+                                                <td class="px-4 py-2 border-r border-black">{{$loans->book->author}}</td>
+                                                <td class="px-4 py-2 border-r border-black">{{$loans->tanggal_pinjam}}</td>
+                                                <td class="px-4 py-2 border-r border-black">{{$loans->tanggal_tenggat}}</td>
                                                 <td class="px-4 py-2 border-black">
                                                     <button class="">Returned</button>
                                                 </td>
                                             </tr>
+                                            @endforeach
                                             
                                         </tbody>
                                     </table>
@@ -178,8 +183,7 @@
                                         <thead class="text-white border border-black bg-[#2D2D2D]">
                                             <tr>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
-                                                <th class="px-4 py-2 text-left"colspan="2">Book Name</th>
-                                                <th class="border-r border-black border-3"></th>
+                                                <th class="px-4 py-2 text-left">Book Name</th>
 
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">User</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Loaned Date</th>
@@ -187,16 +191,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Example Row 1 -->
+                                            @foreach($loanWait as $loan)
                                             <tr class="border border-b border-black hover:bg-gray-100">
                                                 <td class="px-4 py-2 text-center border-r border-black center col-2">1</td>
-                                                <td class="px-4 py-2 border-black" colspan="2">The Great Gatsby</td>
-                                                <td class="px-4 py-2 border-r border-black"></td>
-
-                                                <td class="px-4 py-2 border-r border-black">F. Scott Fitzgerald</td>
-                                                <td class="px-4 py-2 border-r border-black">Available</td>
-                                              
+                                                <td class="px-4 py-2 border-r border-black" >{{$loan->book->title}}</td>
+                                                <td class="px-4 py-2 border-r border-black">{{$loan->user->name}}</td>
+                                                <td class="px-4 py-2 border-r border-black">{{$loan->tanggal_pinjam}}</td>
+                                                <td class="px-4 py-2 border-r border-black"><input type="date"></td>
+                                               
                                             </tr>
+                                            @endforeach
                                             
                                         </tbody>
                                     </table>
