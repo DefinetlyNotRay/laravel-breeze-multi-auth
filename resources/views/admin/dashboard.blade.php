@@ -275,7 +275,7 @@
                     type="text"
                     id="bookTitleInput"
                     class="w-full px-3 py-2 border rounded"
-                    disabled
+                    readonly    
                 />
             </div>
 
@@ -285,9 +285,10 @@
                 <input
                     type="date"
                     id="todaysDateInput"
+                    name="todaysDateInput"
                     class="w-full px-3 py-2 border rounded"
                     value="{{ date('Y-m-d') }}"
-                    disabled
+                    readonly    
                 />
             </div>
 
@@ -298,10 +299,27 @@
                     type="date"
                     id="tanggalTenggatInput"
                     class="w-full px-3 py-2 border rounded"
-                    disabled
+                    readonly    
                 />
             </div>
-
+            <div class="mb-4">
+                <label class="block text-gray-700">Kerusakan</label>
+                <select name="kerusakan" class="w-full px-3 py-2 border rounded" id="kerusakan">
+                    <option value="none">None</option>
+                    <option value="rusak">Rusak</option>
+                    <option value="hilang">Hilang</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Denda</label>
+                <input
+                    type="text"
+                    id="dendaInput"
+                    name="denda"
+                    class="w-full px-3 py-2 border rounded"
+                    value="0"
+                />
+            </div>
             <!-- Action Buttons -->
             <div class="flex justify-end gap-4">
                 <button
@@ -333,20 +351,45 @@ const loanIdInput = document.getElementById("loanIdInput");
 
 const openModalButtons = document.querySelectorAll("#openModalButton");
 const cancelModalButton = document.getElementById("cancelModalButton");
-
+const dendaInput = document.getElementById("dendaInput");
 // Open modal with autofilled data
 openModalButtons.forEach((button) => {
     button.addEventListener("click", () => {
         const loanId = button.getAttribute("data-loan-id");
         const bookTitle = button.getAttribute("data-book-title");
         const tanggalTenggat = button.getAttribute("data-tanggal-tenggat");
-
+        const currentDate = new Date('Y-m-d')
         // Fill modal inputs
         bookTitleInput.value = bookTitle;
         tanggalTenggatInput.value = tanggalTenggat;
         loanIdInput.value = loanId;
-
-        // Show modal
+        let denda = 0;
+        let dendaRusak = 0;
+        const kerusakanSelect = document.getElementById("kerusakan");
+        const calculateDenda = () => {
+        if (currentDate > tanggalTenggat) {
+            const diffTime = Math.abs(currentDate - tanggalTenggat);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Konversi ke hari
+            if (diffDays <= 7) {
+                denda = diffDays * 5000; // Rp5000 per hari jika terlambat <= 7 hari
+            } else if (diffDays <= 30) {
+                denda = 7 * 5000 + (diffDays - 7) * 10000; // Hari pertama Rp5000, sisanya Rp10000
+            } else {
+                denda = 7 * 5000 + 23 * 10000 + (diffDays - 30) * 20000; // Hari ke-31 dst Rp20000
+            }
+        }        
+            const kerusakan = kerusakanSelect.value;
+        if (kerusakan === "rusak") {
+            dendaRusak += 50000; 
+        } else if (kerusakan === "hilang") {
+            dendaRusak += 1500000; 
+        }else{
+            dendaRusak = 0;
+        }
+        dendaInput.value = denda+dendaRusak;
+        }
+        const kerusakan = kerusakanSelect.value;
+        kerusakanSelect.addEventListener("change", calculateDenda);
         modal.classList.remove("hidden");
     });
 });

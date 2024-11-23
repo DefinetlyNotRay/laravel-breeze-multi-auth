@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get( '/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post( '/pickedup/{id}', [AdminController::class, 'pickedup']);
-    Route::get('/return/{id}',[AdminController::class, 'returnPage']);
+    Route::post('/return',[AdminController::class, 'return']);
 });
 
 

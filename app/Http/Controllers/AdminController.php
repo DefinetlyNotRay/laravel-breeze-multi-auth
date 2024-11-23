@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Loan;
+use App\Models\ReturnModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,12 +37,27 @@ class AdminController extends Controller
 
         return redirect('/admin/dashboard')->with("success", "Due date successfully set.");
     }
-    public function returnPage($id)
-    {
+        public function return(Request $request)
+        {
+            $id = $request->loan_id;
+            $today = $request->todaysDateInput;
+            $kerusakan = $request->kerusakan;
+            $denda = $request->denda;
 
+            ReturnModel::create([
+                'id_loan' => $id,
+                'tanggal_pengembalian' => $today,
+                'denda' => $denda,
+                "keadaan" => $kerusakan,
+            ]);
+            Loan::where("id_loan",$id)->update([
+                "status" => "returned"
+            ]);
+            $loansBook = Loan::where("id_loan",$id)->first();
+            Book::where("id",$loansBook->id_buku)->update([
+                "status" => "Available"
+            ]);
 
-        $loan = Loan::where("id_loan", $id)->get();
-
-        return view('admin.returnPage',compact('loan'))->with("success", "Due date successfully set.");
-    }
+            return redirect('/admin/dashboard')->with("success", "Due date successfully set.");
+        }
 }
