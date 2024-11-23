@@ -30,8 +30,9 @@ public function book()
 
 public function returns()
 {
-    return $this->hasOne(ReturnModel::class, 'id_loan');
+    return $this->hasOne(ReturnModel::class, 'id_loan', 'id_loan');
 }
+
 public function scopeCurrentlyLoaning($query, $userId)
 {
     return $query->where('id_user', $userId)

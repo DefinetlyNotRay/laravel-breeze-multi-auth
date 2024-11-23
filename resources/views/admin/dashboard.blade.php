@@ -100,18 +100,18 @@
                             <div class="mt-5">
                                 <div class="flex flex-col gap-2">
                                     <p class="text-3xl font-bold">Books</p>
-                                    <input class="w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-8" type="text" placeholder="Search"> 
+                                    <input id="searchBooks" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-8" 
+                                    type="text" placeholder="Search Books">
                                 </div>
                                 
                                 <div class="py-4 overflow-x-auto overflow-y-scroll max-h-[38rem]">
-                                    <table class="border-collapse table-auto  w-[808px]">
+                                    <table class="border-collapse table-auto  w-[808px]"  id="booksTable">
                                         <thead class="text-white border border-black bg-[#2D2D2D]">
                                             <tr>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Book Name</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Author</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Status</th>
-                                                <th class="px-4 py-2 text-left border-black border-3">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -124,25 +124,21 @@
                                                 <td class="px-4 py-2 border-r border-black" colspan="2">{{$books->title}}</td>
                                                 <td class="px-4 py-2 border-r border-black">{{$books->author}}</td>
                                                 <td class="px-4 py-2 border-r border-black">{{$books->status}}</td>
-                                                <td class="px-4 py-2 border-black">
-                                                    <button class="">Edit</button>
-                                                </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
-                                
                             </div>    
                         </div>
                         <div class="">
                             <div class="">
                                 <div class="flex items-end justify-between">
                                     <p class="text-3xl font-bold">Loaned Books</p>
-                                    <input class="w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" type="text" placeholder="Search"> 
-                                </div>
+                                    <input id="searchLoaned" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
+                                    type="text" placeholder="Search Loaned Books">                                </div>
                                 <div class="py-4 overflow-x-auto ">
-                                    <table class="border-collapse table-auto  w-[808px]">
+                                    <table class="border-collapse table-auto  w-[808px]" id="loanedTable">
                                         <thead class="text-white border border-black bg-[#2D2D2D]">
                                             <tr>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
@@ -186,10 +182,11 @@
                             <div class="">
                                 <div class="flex items-end justify-between">
                                     <p class="text-3xl font-bold">Waitlisted Books</p>
-                                    <input class="w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" type="text" placeholder="Search"> 
-                                </div>
+                                    <input id="searchWaitlisted" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
+                                    type="text" placeholder="Search Waitlisted Books">
+                                                                </div>
                                 <div class="py-4 overflow-x-auto">
-                                    <table class="border-collapse table-auto w-[808px]">
+                                    <table class="border-collapse table-auto w-[808px]" id="waitlistedTable">
                                         <thead class="text-white border border-black bg-[#2D2D2D]">
                                             <tr>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
@@ -342,6 +339,18 @@
 
         </main>
         <script>
+         document.querySelectorAll('.search-input').forEach((input) => {
+        input.addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase();
+            const tableId = this.id.replace('search', '').toLowerCase() + 'Table'; // e.g., searchBooks -> booksTable
+            const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+
+            rows.forEach(row => {
+                const rowText = Array.from(row.cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+                row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+            });
+        });
+    });
             // Select modal and input elements
 const modal = document.getElementById("returnModal");
 const bookTitleInput = document.getElementById("bookTitleInput");
@@ -357,42 +366,49 @@ openModalButtons.forEach((button) => {
     button.addEventListener("click", () => {
         const loanId = button.getAttribute("data-loan-id");
         const bookTitle = button.getAttribute("data-book-title");
-        const tanggalTenggat = button.getAttribute("data-tanggal-tenggat");
-        const currentDate = new Date('Y-m-d')
+        const tanggalTenggat = new Date(button.getAttribute("data-tanggal-tenggat")); // Ensure this is converted to a Date object
+        const currentDate = new Date(); // Use the current date
         // Fill modal inputs
         bookTitleInput.value = bookTitle;
-        tanggalTenggatInput.value = tanggalTenggat;
+        tanggalTenggatInput.value = tanggalTenggat.toISOString().split('T')[0]; // Format as Y-m-d
         loanIdInput.value = loanId;
         let denda = 0;
         let dendaRusak = 0;
         const kerusakanSelect = document.getElementById("kerusakan");
+
         const calculateDenda = () => {
-        if (currentDate > tanggalTenggat) {
-            const diffTime = Math.abs(currentDate - tanggalTenggat);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Konversi ke hari
-            if (diffDays <= 7) {
-                denda = diffDays * 5000; // Rp5000 per hari jika terlambat <= 7 hari
-            } else if (diffDays <= 30) {
-                denda = 7 * 5000 + (diffDays - 7) * 10000; // Hari pertama Rp5000, sisanya Rp10000
+            if (currentDate > tanggalTenggat) {
+                const diffTime = currentDate - tanggalTenggat; // Time difference in milliseconds
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert to days
+                if (diffDays <= 7) {
+                    denda = diffDays * 5000; // Rp5000 per day if late <= 7 days
+                } else if (diffDays <= 30) {
+                    denda = 7 * 5000 + (diffDays - 7) * 10000; // First 7 days Rp5000, the rest Rp10000
+                } else {
+                    denda = 7 * 5000 + 23 * 10000 + (diffDays - 30) * 20000; // From day 31 Rp20000
+                }
             } else {
-                denda = 7 * 5000 + 23 * 10000 + (diffDays - 30) * 20000; // Hari ke-31 dst Rp20000
+                denda = 0; // No fine if not late
             }
-        }        
             const kerusakan = kerusakanSelect.value;
-        if (kerusakan === "rusak") {
-            dendaRusak += 50000; 
-        } else if (kerusakan === "hilang") {
-            dendaRusak += 1500000; 
-        }else{
-            dendaRusak = 0;
-        }
-        dendaInput.value = denda+dendaRusak;
-        }
-        const kerusakan = kerusakanSelect.value;
+            if (kerusakan === "rusak") {
+                dendaRusak = 50000; 
+            } else if (kerusakan === "hilang") {
+                dendaRusak = 1500000; 
+            } else {
+                dendaRusak = 0;
+            }
+            console.log(denda);
+
+            dendaInput.value = denda + dendaRusak;
+        };
+
         kerusakanSelect.addEventListener("change", calculateDenda);
+        calculateDenda(); // Calculate denda on modal open
         modal.classList.remove("hidden");
     });
 });
+
 
 // Close modal
 cancelModalButton.addEventListener("click", () => {

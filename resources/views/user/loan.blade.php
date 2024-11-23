@@ -86,13 +86,13 @@
                     <div class="flex flex-col items-center justify-center">
                         <h2 class="text-lg font-bold">Currently Loaning</h2>
                         @if($currentlyLoaning->isNotEmpty())
-                        <ul class="flex gap-5">
+                        <ul class="flex flex-col gap-5">
                             @foreach ($currentlyLoaning as $loan)
                             <a href="/loan/{{$loan->book->id}}">
 
                                 <img 
                                     src="{{$loan->book->cover_img}}" 
-                                    class="w-[200px] h-[300px] object-cover" 
+                                    class="shadow-2xl w-[200px] h-[300px] object-cover" 
                                     alt="">
                             </a>
                             <div>
@@ -121,7 +121,7 @@
             
                                             <img 
                                                 src="{{$loan->book->cover_img}}" 
-                                                class="w-[200px] h-[300px] object-cover" 
+                                                class="shadow-2xl w-[200px] h-[300px] object-cover" 
                                                 alt="">
                                         </a>
                                         <div>
@@ -129,8 +129,10 @@
                                             <p class="text-xs font-semibold opacity-70">{{$loan->book->author}}</p>
                                             <p class="text-xs font-semibold opacity-70">Loan Date: {{$loan->tanggal_pinjam}}</p>
                                             <p class="text-xs font-semibold opacity-70">Due Date: {{$loan->tanggal_tenggat}}</p>
-                                            <p class="text-xs font-semibold opacity-70">Return Date: {{$loan->returns->tanggal_pengembalian}}</p>
-                                        </div>                           
+                                            <p class="text-xs font-semibold opacity-70">
+                                                Return Date: {{ $loan->returns->tanggal_pengembalian ?? 'Not Returned Yet' }}
+                                            </p>
+                                                                                    </div>                           
                                     </div>
                                      @endforeach
                                 </ul>
@@ -150,7 +152,7 @@
             
                                             <img 
                                                 src="{{$loan->book->cover_img}}" 
-                                                class="w-[200px] h-[300px] object-cover" 
+                                                class="shadow-2xl w-[200px] h-[300px] object-cover" 
                                                 alt="">
                                         </a>
                                         <div>
