@@ -12,7 +12,7 @@ class Category extends Model
     protected $primaryKey="id_category";
     protected $fillable= [
         "id_category",
-        "nama_kategory"
+        "nama_category"
     ];
     public function book()
     {

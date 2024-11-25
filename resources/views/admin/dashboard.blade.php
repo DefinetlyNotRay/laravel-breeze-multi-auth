@@ -26,14 +26,14 @@
             <div class="flex items-center gap-16 px-6 ">
                 <div class="relative">
 
-                <a href="/books" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                <a href="/admin/books" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
                     Books
                 </a>
             </div>
 
                 <div class="relative">
 
-                    <a href="/" class="mx-auto font-bold text-center text-gray-800 text-md active hover:text-gray-900">
+                    <a href="/admin/dashboard" class="mx-auto font-bold text-center text-gray-800 text-md active hover:text-gray-900">
                         Dashboard
                     </a>
                 </div>

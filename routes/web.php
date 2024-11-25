@@ -41,6 +41,9 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get( '/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post( '/pickedup/{id}', [AdminController::class, 'pickedup']);
     Route::post('/return',[AdminController::class, 'return']);
+    Route::get('/admin/books',[AdminController::class, 'books']);
+    Route::post('/add/admin/books',[AdminController::class, 'add']);
+
 });
 
 
