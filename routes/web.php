@@ -44,7 +44,9 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/admin/books',[AdminController::class, 'books']);
     Route::post('/add/admin/books',[AdminController::class, 'add']);
     Route::delete('/delete/{id}', [AdminController::class, 'delete']);
-});
+    Route::post('/edit/admin/books', [AdminController::class, 'edit']);
+    Route::get('/admin/loans',[AdminController::class, 'loanPage']);
+});;
 
 
 

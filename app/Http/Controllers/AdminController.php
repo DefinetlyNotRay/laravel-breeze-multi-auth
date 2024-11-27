@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Loan;
+use App\Models\User;
 use App\Models\Category;
 use App\Models\ReturnModel;
 use Illuminate\Http\Request;
@@ -24,6 +25,19 @@ class AdminController extends Controller
         $loanWait = Loan::Wait()->with('book')->get();
 
         return view('admin.dashboard', compact('user', 'book', 'loan','loanWait'));
+    }
+    public function loanPage()
+    {
+        $loans = Loan::with('returns')->get();
+
+       
+
+        return view('admin.loans', compact('loans'));
+    }
+    public function users()
+    {
+        $users = User::get();
+        return view('admin.user', compact('users'));
     }
     public function pickedup($id, Request $request)
     {
@@ -60,6 +74,33 @@ class AdminController extends Controller
         ]);
 
         return redirect('/admin/dashboard')->with("success", "Due date successfully set.");
+    }
+    public function edit(Request $request)
+    {
+        $id = $request->id;
+        $title = $request->title;
+        $desc = $request->desc;
+        $author = $request->author;
+        $cover = $request->uploadedImageUrl;
+
+        if ($request->has('newCategory') && $request->input('newCategory') !== null) {
+            $category = Category::create([
+                'nama_category' => $request->newCategory,
+            ]);
+            $categoryId = $category->id_category;
+        } else {
+            $categoryId = $request->Category;
+        }
+
+        Book::where("id",$id)->update([
+            'title' => $title,
+            'author' => $author,
+            'id_category' => $categoryId,
+            'desc' => $desc,
+            "cover_img" => $cover
+        ]);
+
+        return redirect('/admin/books')->with("success", "Book successfully updated.");
     }
     public function books(Request $request)
     {
@@ -102,14 +143,7 @@ class AdminController extends Controller
         ]);
 
 
-        return redirect('/admin/books')->with("success", "Book Successfully created.");
-    }
-    public function delete($id,Request $request)
-    {   
-        $book = Book::find($id);
-        $book->delete();
-
-        return redirect('/admin/books')->with("success", "Deletion Successfull.");
+        return redirect('/admin/books')->with("success", "Due date successfully set.");
     }
     
 }

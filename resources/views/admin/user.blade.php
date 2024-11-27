@@ -99,11 +99,9 @@
                                         <thead class="text-white border border-black bg-[#2D2D2D]">
                                             <tr>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Book Name</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Description</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Category</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Author</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Status</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Name</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Gmail</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Password</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Action</th>
 
                                             </tr>
@@ -112,33 +110,29 @@
                                             @php
                                                 $no = 1
                                             @endphp
-                                            @foreach($books as $books)
+                                            @foreach($users as $users)
                                             <tr class="border border-b border-black hover:bg-gray-100">
                                                 <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
-                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$books->title}}</td>
+                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$users->name}}</td>
                                            <td class="px-4 py-2 border-r border-black">
-                                                    <span class="short-desc">{{ \Illuminate\Support\Str::words($books->desc, 20, '...') }}</span>
-                                                    <span class="full-desc hidden">{{ $books->desc }}</span>
-                                                    <a href="#" class="see-more text-blue-500">See more</a>
+                                                    <span class="full-desc hidden">{{ $users->email }}</span>
                                                 </td>
-                                                <td class="px-4 py-2 border-r border-black" >{{$books->category->nama_category}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$books->author}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$books->status}}</td>
+                                                <td class="px-4 py-2 border-r border-black" >{{$users->role}}</td>
+                                                <td class="px-4 py-2 border-r border-black">{{$users->password}}</td>
                                                 <td class="px-4 py-2 border-r  flex flex-col gap-5 border-black">
                                                     <button
                                                         class="px-4 py-2 text-white bg-green-500 rounded openEditModal hover:bg-green-600"
-                                                        data-id="{{$books->id}}"
-                                                        data-title="{{$books->title}}"
-                                                        data-category="{{$books->id_category}}"
-                                                        data-author="{{$books->author}}"
-                                                        data-desc="{{$books->desc}}"
-                                                        data-cover="{{$books->cover_img}}"
+                                                        data-id="{{$users->id}}"
 
+                                                        data-name="{{$users->name}}"
+                                                        data-email="{{$users->email}}"
+                                                        data-role="{{$users->role}}"
+                                                        data-password="{{$users->password}}"
                                                         id="openEditModal"
                                                     >
                                                         Edit
                                                     </button>
-                                                    <form action="/delete/{{$books->id}}" method="POST">
+                                                    <form action="/delete/user/{{$users->id}}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button
@@ -162,106 +156,7 @@
                 
     </div>
 </div>
-<div
-    id="returnModal"
-    class="fixed inset-0 flex items-center justify-center hidden bg-black bg-opacity-50"
->
-    <div class="p-6 bg-white rounded-lg shadow-lg w-96">
-        <h2 class="mb-4 text-lg font-semibold">Return Book</h2>
-        <form id="returnForm" action="/add/admin/books" method="POST">
-            @csrf
 
-            <!-- Book Title -->
-            <div class="mb-4">
-                <label class="block text-gray-700">Book Title:</label>
-                <input
-                    type="text"
-                    id="titles"
-                    name="title"
-                    class="w-full px-3 py-2 border rounded"
-                        
-                />
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-gray-700">Description</label>
-                <input
-                    type="text"
-                    id="descs"
-                    name="desc"
-                    class="w-full px-3 py-2 border rounded"
-                    
-                />
-            </div>
-
-            <!-- Tanggal Tenggat -->
-            <div class="mb-4">
-                    <label class="block text-gray-700">Author</label>
-                <input
-                    type="text"
-                    id="authors"
-                    name="author"
-                    class="w-full px-3 py-2 border rounded"
-                        
-                />
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700">Category</label>
-                <select
-                    name="Category"
-                    class="w-full px-3 py-2 border rounded"
-                    id="categorySelects"
-                    onchange="toggleNewCategoryInput()"
-                >
-                    @foreach($categories as $category)
-                    <option value="{{$category->id_category}}">{{$category->nama_category}}</option>
-                    @endforeach
-                    <option value="new">Add New Category</option>
-                </select>
-            
-                <input
-                    type="text"
-                    id="newCategoryInputs"
-                    name="newCategory"
-                    placeholder="Enter new category"
-                    class="hidden w-full px-3 py-2 mt-2 border rounded"
-                />
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700">Cover</label>
-                <input
-                    type="file"
-                    id="coverInputs"
-                    name="cover"
-                    class="w-full px-3 py-2 border rounded"
-                    onchange="uploadImageToCloudinary(this)"
-                />
-            </div>
-            <div id="spinner" class="flex items-center justify-center hidden mt-4">
-                <div class="w-8 h-8 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
-                <span class="ml-2 text-blue-500">Uploading...</span>
-            </div>
-            <input type="hidden" id="uploadedImageUrl" name="uploadedImageUrl" />
-
-            <!-- Action Buttons -->
-            <div class="flex justify-end gap-4">
-                <button
-                    type="button"
-                    id="cancelModalButton"
-                    class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
-                >
-                    Cancel
-                </button>
-                <button
-                    type="submit"
-                    class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
-                >
-                    Confirm
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
 <div
     id="editModal"
     class="fixed inset-0 flex items-center justify-center hidden bg-black bg-opacity-50"
@@ -298,9 +193,7 @@
                         id="categorySelect"
                         onchange="toggleNewCategoryInput()"
                     >
-                        @foreach($categories as $category)
-                        <option value="{{$category->id_category}}">{{$category->nama_category}}</option>
-                        @endforeach
+                        
                         <option value="new">Add New Category</option>
                     </select>
             

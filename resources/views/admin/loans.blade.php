@@ -26,7 +26,7 @@
             <div class="flex items-center gap-16 px-6 ">
                 <div class="relative">
 
-                <a href="/admin/books" class="mx-auto font-bold text-gray-800 active text-md hover:text-gray-800/70 hover:text-gray-900">
+                <a href="/admin/books" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
                     Books
                 </a>
             </div>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="relative">
 
-                <a href="/admin/loans" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                <a href="/admin/loans" class="mx-auto font-bold text-gray-800 text-md active hover:text-gray-800/70 hover:text-gray-900">
                     Loans
                 </a>                
             </div>
@@ -84,27 +84,20 @@
                      <div class="flex">
                         <div class="flex flex-col items-start w-full">
                             <div class="w-full mt-5">
-                                <p class="text-3xl font-bold">Books</p>
-                                <div class="flex items-center justify-between gap-2">
-                                    <input id="searchBooks" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-8" 
-                                    type="text" placeholder="Search Books">
-                                    <button                                                     id="openModalButton"
-                                    class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
-                                        Add Book
-                                    </button>
-                                </div>
-                                
+                                <p class="text-3xl font-bold">Loans</p>
                                 <div class="py-4 overflow-x-auto overflow-y-scroll max-h-[38rem]">
                                     <table class="w-full border-collapse table-auto"  id="booksTable">
                                         <thead class="text-white border border-black bg-[#2D2D2D]">
                                             <tr>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Book Name</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Description</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Category</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Author</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">User</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Book Title</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Tanggal Pinjam</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Tanggal Tenggat</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Status</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Action</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Tanggal Pengembalian</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Keadaan</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Denda</th>
 
                                             </tr>
                                         </thead>
@@ -112,50 +105,34 @@
                                             @php
                                                 $no = 1
                                             @endphp
-                                            @foreach($books as $books)
+                                            @foreach($loans as $loans)
                                             <tr class="border border-b border-black hover:bg-gray-100">
                                                 <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
-                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$books->title}}</td>
-                                           <td class="px-4 py-2 border-r border-black">
-                                                    <span class="short-desc">{{ \Illuminate\Support\Str::words($books->desc, 20, '...') }}</span>
-                                                    <span class="full-desc hidden">{{ $books->desc }}</span>
-                                                    <a href="#" class="see-more text-blue-500">See more</a>
+                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$loans->user->name}}</td>
+                                                <td class="px-4 py-2 border-r border-black">
+                                                    {{ $loans->book->title }}
                                                 </td>
-                                                <td class="px-4 py-2 border-r border-black" >{{$books->category->nama_category}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$books->author}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$books->status}}</td>
-                                                <td class="px-4 py-2 border-r  flex flex-col gap-5 border-black">
-                                                    <button
-                                                        class="px-4 py-2 text-white bg-green-500 rounded openEditModal hover:bg-green-600"
-                                                        data-id="{{$books->id}}"
-                                                        data-title="{{$books->title}}"
-                                                        data-category="{{$books->id_category}}"
-                                                        data-author="{{$books->author}}"
-                                                        data-desc="{{$books->desc}}"
-                                                        data-cover="{{$books->cover_img}}"
-
-                                                        id="openEditModal"
-                                                    >
-                                                        Edit
-                                                    </button>
-                                                    <form action="/delete/{{$books->id}}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button
-                                                            type="submit"
-                                                            class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </form>
+                                                <td class="px-4 py-2 border-r border-black" >{{$loans->tanggal_pinjam}}</td>
+                                                <td class="px-4 py-2 border-r border-black">{{$loans->tanggal_tenggat}}</td>
+                                                <td class="px-4 py-2 border-r border-black">
+                                                    {{ $loans->status }}
+                                                </td>
+                                                <td class="px-4 py-2 border-r border-black">            
+                                                    {{ $loans->returns?->tanggal_pengembalian ?? '-' }}
+                                                </td>
+                                                <td class="px-4 py-2 border-r border-black">                        
+                                                    {{ $loans->returns?->keadaan ?? '-' }}
                                                     
                                                 </td>
+                                                <td class="px-4 py-2 border-r border-black">                        
+                                                    {{ $loans->returns?->denda ?? '-' }}
 
+                                                </td>
                                             </tr>
-                                           @endforeach 
+                                           @endforeach
                                         </tbody>
                                     </table>
-                                    
+                                   
                                 </div>
                             </div>    
                         </div>
@@ -168,7 +145,7 @@
 >
     <div class="p-6 bg-white rounded-lg shadow-lg w-96">
         <h2 class="mb-4 text-lg font-semibold">Return Book</h2>
-        <form id="returnForm" action="/add/admin/books" method="POST">
+        <form id="returnForm" action="/add/admin/loans" method="POST">
             @csrf
 
             <!-- Book Title -->
@@ -213,9 +190,7 @@
                     id="categorySelects"
                     onchange="toggleNewCategoryInput()"
                 >
-                    @foreach($categories as $category)
-                    <option value="{{$category->id_category}}">{{$category->nama_category}}</option>
-                    @endforeach
+                    
                     <option value="new">Add New Category</option>
                 </select>
             
@@ -298,9 +273,7 @@
                         id="categorySelect"
                         onchange="toggleNewCategoryInput()"
                     >
-                        @foreach($categories as $category)
-                        <option value="{{$category->id_category}}">{{$category->nama_category}}</option>
-                        @endforeach
+                      
                         <option value="new">Add New Category</option>
                     </select>
             

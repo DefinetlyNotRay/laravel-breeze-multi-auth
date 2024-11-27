@@ -39,7 +39,7 @@
                 </div>
                 <div class="relative">
 
-                <a href="/loans" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                <a href="/admin/loans" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
                     Loans
                 </a>                
             </div>
