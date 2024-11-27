@@ -127,12 +127,22 @@
                                                         data-title="{{$books->title}}"
                                                         data-category="{{$books->id_category}}"
                                                         data-author="{{$books->author}}"
-                                                        data-status="{{$books->status}}"
+                                                        data-desc="{{$books->desc}}"
                                                         id="openEditModal"
                                                     >
                                                         Edit
                                                     </button>
-
+                                                    <form action="/delete/{{$books->id}}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button
+                                                            type="submit"
+                                                            class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                    
                                                 </td>
 
                                             </tr>
@@ -159,7 +169,7 @@
                 <label class="block text-gray-700">Book Title:</label>
                 <input
                     type="text"
-                    id="title"
+                    id="titles"
                     name="title"
                     class="w-full px-3 py-2 border rounded"
                         
@@ -170,7 +180,7 @@
                 <label class="block text-gray-700">Description</label>
                 <input
                     type="text"
-                    id="todaysDateInput"
+                    id="descs"
                     name="desc"
                     class="w-full px-3 py-2 border rounded"
                     
@@ -182,7 +192,7 @@
                     <label class="block text-gray-700">Author</label>
                 <input
                     type="text"
-                    id="author"
+                    id="authors"
                     name="author"
                     class="w-full px-3 py-2 border rounded"
                         
@@ -193,7 +203,7 @@
                 <select
                     name="Category"
                     class="w-full px-3 py-2 border rounded"
-                    id="categorySelect"
+                    id="categorySelects"
                     onchange="toggleNewCategoryInput()"
                 >
                     @foreach($categories as $category)
@@ -204,7 +214,7 @@
             
                 <input
                     type="text"
-                    id="newCategoryInput"
+                    id="newCategoryInputs"
                     name="newCategory"
                     placeholder="Enter new category"
                     class="hidden w-full px-3 py-2 mt-2 border rounded"
@@ -214,7 +224,7 @@
                 <label class="block text-gray-700">Cover</label>
                 <input
                     type="file"
-                    id="coverInput"
+                    id="coverInputs"
                     name="cover"
                     class="w-full px-3 py-2 border rounded"
                     onchange="uploadImageToCloudinary(this)"
@@ -251,7 +261,7 @@
 >
     <div class="p-6 bg-white rounded-lg shadow-lg w-96">
         <h2 class="mb-4 text-lg font-semibold">Returnaa Book</h2>
-        <form id="returnForm" action="/add/admin/books" method="POST">
+        <form id="returnForm" action="/edit/admin/books" method="POST">
             @csrf
 
             <!-- Book Title -->
@@ -263,7 +273,7 @@
 
             <div class="mb-4">
                 <label class="block text-gray-700">Description</label>
-                <input type="text" id="todaysDateInput" name="desc" class="w-full px-3 py-2 border rounded" />
+                <input type="text" id="desc" name="desc" class="w-full px-3 py-2 border rounded" />
 
             </div>
 
@@ -275,17 +285,17 @@
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700">Category</label>
-                <select
-                    name="Category"
-                    class="w-full px-3 py-2 border rounded"
-                    id="categorySelect"
-                    onchange="toggleNewCategoryInput()"
-                >
-                    @foreach($categories as $category)
-                    <option value="{{$category->id_category}}">{{$category->nama_category}}</option>
-                    @endforeach
-                    <option value="new">Add New Category</option>
-                </select>
+                    <select
+                        name="Category"
+                        class="w-full px-3 py-2 border rounded"
+                        id="categorySelect"
+                        onchange="toggleNewCategoryInput()"
+                    >
+                        @foreach($categories as $category)
+                        <option value="{{$category->id_category}}">{{$category->nama_category}}</option>
+                        @endforeach
+                        <option value="new">Add New Category</option>
+                    </select>
             
                 <input
                     type="text"
@@ -310,6 +320,7 @@
                 <span class="ml-2 text-blue-500">Uploading...</span>
             </div>
             <input type="hidden" id="uploadedImageUrl" name="uploadedImageUrl" />
+            <input type="hidden" id="id" name="id" />
 
             <!-- Action Buttons -->
             <div class="flex justify-end gap-4">
@@ -397,9 +408,9 @@ const editModal = document.getElementById("editModal");
 // Form fields in the modal
 const titleInput = document.getElementById("title");
 const authorInput = document.getElementById("author");
-const descInput = document.getElementById("todaysDateInput");
+const descInput = document.getElementById("desc");
 const categorySelect = document.getElementById("categorySelect");
-const newCategoryInput = document.getElementById("newCategoryInput");
+const newCategoryInput = document.getElementById("desc");
 
 const openModalButtons = document.querySelectorAll("#openModalButton");
 
@@ -412,8 +423,9 @@ openEditButton.forEach((button) => {
         // Retrieve data attributes
         const bookId = button.getAttribute("data-id");
         const title = button.getAttribute("data-title");
+        const desc = button.getAttribute("data-desc");
+
         const author = button.getAttribute("data-author");
-        const desc = button.getAttribute("data-status"); // Assuming 'status' is used as description
         const categoryId = button.getAttribute("data-category");
 
         // Debugging: Log to check if data is correctly retrieved
@@ -421,17 +433,21 @@ openEditButton.forEach((button) => {
 
         // Populate modal inputs
         titleInput.value = title;
+        document.getElementById("id").value = bookId;
         document.getElementById("author").value = author || "";
-        document.getElementById("todaysDateInput").value = desc || "";
+        document.getElementById("desc").value = desc || "";
         const categorySelect = document.getElementById("categorySelect");
 
+        // Set category or show new category input
         // Set category or show new category input
         if (categoryId === "new") {
             document.getElementById("newCategoryInput").classList.remove("hidden");
             document.getElementById("newCategoryInput").value = ""; // Clear new category input
         } else {
-            categorySelect.value = categoryId || ""; // Select existing category
+            document.getElementById("newCategoryInput").classList.add("hidden");
+            categorySelect.value = categoryId || ""; // Set existing category as selected
         }
+
 
         // Show the modal
         document.getElementById("editModal").classList.remove("hidden");
@@ -448,7 +464,7 @@ openModalButtons.forEach((button) => {
     });
 });
 cancelModalButtonss.addEventListener("click", () => {
-    modal.classList.add("hidden");
+    modals.classList.add("hidden");
 });
 
 // Close modal

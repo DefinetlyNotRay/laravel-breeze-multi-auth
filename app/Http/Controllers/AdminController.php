@@ -102,7 +102,14 @@ class AdminController extends Controller
         ]);
 
 
-        return redirect('/admin/books')->with("success", "Due date successfully set.");
+        return redirect('/admin/books')->with("success", "Book Successfully created.");
+    }
+    public function delete($id,Request $request)
+    {   
+        $book = Book::find($id);
+        $book->delete();
+
+        return redirect('/admin/books')->with("success", "Deletion Successfull.");
     }
     
 }

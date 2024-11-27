@@ -43,7 +43,7 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::post('/return',[AdminController::class, 'return']);
     Route::get('/admin/books',[AdminController::class, 'books']);
     Route::post('/add/admin/books',[AdminController::class, 'add']);
-
+    Route::delete('/delete/{id}', [AdminController::class, 'delete']);
 });
 
 
