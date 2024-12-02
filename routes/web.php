@@ -49,7 +49,9 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 });;
 
 
+Route::post('/GetPoints',[AdminController::class, 'getPoints']);
 
+Route::post('/returnBook/{token}', [AdminController::class, 'returnBook'])->where('token', '.*');
 
 
 require __DIR__.'/auth.php';

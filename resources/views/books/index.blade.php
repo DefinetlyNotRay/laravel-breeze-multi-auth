@@ -14,9 +14,23 @@
         <nav class="flex items-center justify-between py-6 bg-white drop-shadow-md">
             <!-- Empty div for balancing the right side -->
 
-                <div class="w-[200px] ">
-                    
+            @php
+            $user = auth()->user();
+            @endphp
+            
+            @if ($user)
+                <div class="w-[200px]">
+                    <div class="px-5">
+                        {{ $user->points }} Points
+                    </div>
                 </div>
+            @else
+                <div class="w-[200px]">
+                    <div class="">
+                        Guest (No Points)
+                    </div>
+                </div>
+            @endif
             <!-- Home link, perfectly centered -->
             <div class="flex items-center gap-16 px-6 ">
                 <div class="relative">
@@ -28,7 +42,7 @@
 
                 <div class="relative">
 
-                    <a href="/" class="mx-auto font-bold text-center text-gray-800 text-md  hover:text-gray-900">
+                    <a href="/" class="mx-auto font-bold text-center text-gray-800 text-md hover:text-gray-900">
                         Home
                     </a>
                 </div>
@@ -105,24 +119,25 @@
 
                                 <img 
                                     src="{{$book->cover_img}}" 
-                                    class="w-[200px] h-[300px] object-cover {{ $book->status !== 'Available' ? 'grayscale opacity-50' : '' }}" 
+                                    class="w-[200px] h-[300px] object-cover" 
                                     alt="">
                             </a>
                             <div>
-                                <p class="font-bold text-sm">{{$book->title}}</p>
-                                <p class="text-xs opacity-70 font-semibold">{{$book->author}}</p>
-                                <p class="text-xs opacity-70 font-semibold">Category: {{$book->category->nama_category}}</p>
+                                <p class="text-sm font-bold">{{$book->title}}</p>
+                                <p class="text-xs font-semibold opacity-70">{{$book->author}}</p>
+                                <p class="text-xs font-semibold opacity-70">Category: {{$book->category->nama_category}}</p>
                             </div>
                             <div class="flex justify-center w-full">
-                                @if($book->status == 'Available')
                                 <!-- Tombol Loan -->
+                                @if (!in_array($book->id, $currentlyLoaningBooks))
+
                                 <a href="/loan/{{$book->id}}" class="text-xs mt-2 bg-[#01B14B] w-full text-center text-white hover:bg-[#01B14B]/70 transition-all duration-300 py-1 px-4">
                                     Loan
                                 </a>
                                 @else
                                 <!-- Tombol Tidak Aktif -->
-                                <button disabled class="text-xs mt-2 bg-gray-400 w-full text-center text-white py-1 px-4 cursor-not-allowed">
-                                    Unavailable
+                                <button disabled class="w-full px-4 py-1 mt-2 text-xs text-center text-white bg-gray-400 cursor-not-allowed">
+                                    Read
                                 </button>
                                 @endif
                             </div>

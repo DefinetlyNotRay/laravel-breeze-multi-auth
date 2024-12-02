@@ -19,9 +19,23 @@
         <nav class="flex items-center justify-between py-6 bg-white drop-shadow-md">
             <!-- Empty div for balancing the right side -->
 
-                <div class="w-[200px] ">
-                    
+                   @php
+            $user = auth()->user();
+            @endphp
+            
+            @if ($user)
+                <div class="w-[200px]">
+                    <div class="px-5">
+                        {{ $user->points }} Points
+                    </div>
                 </div>
+            @else
+                <div class="w-[200px]">
+                    <div class="">
+                        Guest (No Points)
+                    </div>
+                </div>
+            @endif
             <!-- Home link, perfectly centered -->
             <div class="flex items-center gap-16 px-6 ">
                 <div class="relative">

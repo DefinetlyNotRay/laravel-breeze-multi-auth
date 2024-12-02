@@ -3,48 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Loan;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BooksController extends Controller
 {
     public function index(Request $request)
 {
+    $userId = Auth::id(); // Get the logged-in user's ID
+
     $category = $request->query('category');
     $categories = Category::all();
     $authors = Book::select('author')->distinct()->get();
 
-    // Ambil buku berdasarkan kategori atau semua buku
-    if ($category) {
-        $books = Book::with('category')
-            ->whereHas('category', function ($query) use ($category) {
-                $query->where('nama_category', $category);
-            })
-            ->orderByRaw("
-                CASE 
-                    WHEN status = 'Available' THEN 1
-                    WHEN status = 'Unavailable' THEN 2
-                    ELSE 3
-                END
-            ")
-            ->get();
-    } else {
-        $books = Book::with('category')
-            ->orderByRaw("
-                CASE 
-                    WHEN status = 'Available' THEN 1
-                    WHEN status = 'Unavailable' THEN 2
-                    ELSE 3
-                END
-            ")
-            ->get();
-    }
+    // Get the book IDs the user is currently loaning
+    $currentlyLoaningBookIds = Loan::currentlyLoaning($userId)->pluck('id_buku')->toArray();
+
+
+    // Fetch books with or without a category filter
+    $books = Book::with('category')
+        ->when($category, function ($query) use ($category) {
+            $query->whereHas('category', function ($q) use ($category) {
+                $q->where('nama_category', $category);
+            });
+        })
+        ->get();
 
     return view('books.index', [
         'category' => $category,
         'books' => $books,
         'categories' => $categories,
-        'authors' => $authors
+        'authors' => $authors,
+        'currentlyLoaningBooks' => $currentlyLoaningBookIds,
     ]);
 }
 
@@ -54,7 +46,16 @@ class BooksController extends Controller
         return view('books.category', compact('id'));
     }
     public function loan($id){
+        $userId = Auth::id(); // Get the logged-in user's ID
+
+        $currentlyLoaningBookIds = Loan::currentlyLoaning($userId)->pluck('id_buku')->toArray();
+
         $books = Book::find($id);
-        return view('books.bookPage', compact('books'));
+        return view('books.bookPage', [
+            
+            'books' => $books,
+           
+            'currentlyLoaningBooks' => $currentlyLoaningBookIds,
+        ]);
     }
 }

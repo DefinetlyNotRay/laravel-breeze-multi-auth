@@ -28,34 +28,14 @@ public function book()
     return $this->belongsTo(Book::class, 'id_buku');
 }
 
-public function returns()
-{
-    return $this->hasOne(ReturnModel::class, 'id_loan', 'id_loan');
-}
 
 public function scopeCurrentlyLoaning($query, $userId)
 {
     return $query->where('id_user', $userId)
-                 ->where('status', 'picked up');
+                 ->where('tanggal_tenggat', '>=', now());
 }
 
-public function scopeReturned($query, $userId)
-{
-    return $query->where('id_user', $userId)
-                 ->where('status', 'returned');
-}
-public function scopeWait($query)
-{
-    return $query->where('status', 'reserved');
-}
-public function scopeLoaning($query)
-{
-    return $query->where('status', 'picked up');
-}
-public function scopeWaitingToBePickedUp($query, $userId)
-{
-    return $query->where('id_user', $userId)
-                 ->where('status', 'reserved');
-}
+
+
 
 }

@@ -17,7 +17,8 @@ class Book extends Model
         "id_category",
         "status",
         "cover_img",
-        "desc"
+        "desc",
+        "total_loan"
     ];
     public function category()
     {
@@ -27,4 +28,5 @@ class Book extends Model
 {
     return $this->hasMany(Loan::class, 'id_buku');
 }
+
 }

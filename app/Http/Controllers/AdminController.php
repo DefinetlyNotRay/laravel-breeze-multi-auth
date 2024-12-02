@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\ReturnModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -26,9 +27,25 @@ class AdminController extends Controller
 
         return view('admin.dashboard', compact('user', 'book', 'loan','loanWait'));
     }
+
+    public function returnBook(){
+         // Find all overdue loans
+         $overdueLoans = Loan::where('tanggal_tenggat', '<', now())
+         ->where('status', "loaned")
+         ->get();
+
+     foreach ($overdueLoans as $loan) {
+         // Mark the loan as returned
+         $loan->update(['status' => "returned"]);
+
+         // Log the action
+         Log::info("Loan ID {$loan->id} has been marked as returned due to overdue.");
+     }
+    }
+
     public function loanPage()
     {
-        $loans = Loan::with('returns')->get();
+        $loans = Loan::get();
 
        
 
@@ -39,42 +56,7 @@ class AdminController extends Controller
         $users = User::get();
         return view('admin.user', compact('users'));
     }
-    public function pickedup($id, Request $request)
-    {
-        $request->validate([
-            'selected_date' => 'required|date|after_or_equal:today',
-        ]); 
-
-        Loan::where("id_loan", $id)->update([
-            "tanggal_tenggat" => $request->selected_date,
-            "status" => 'picked up'
-        ]);
-
-        return redirect('/admin/dashboard')->with("success", "Due date successfully set.");
-    }
-    public function return(Request $request)
-    {
-        $id = $request->loan_id;
-        $today = $request->todaysDateInput;
-        $kerusakan = $request->kerusakan;
-        $denda = $request->denda;
-
-        ReturnModel::create([
-            'id_loan' => $id,
-            'tanggal_pengembalian' => $today,
-            'denda' => $denda,
-            "keadaan" => $kerusakan,
-        ]);
-        Loan::where("id_loan",$id)->update([
-            "status" => "returned"
-        ]);
-        $loansBook = Loan::where("id_loan",$id)->first();
-        Book::where("id",$loansBook->id_buku)->update([
-            "status" => "Available"
-        ]);
-
-        return redirect('/admin/dashboard')->with("success", "Due date successfully set.");
-    }
+   
     public function edit(Request $request)
     {
         $id = $request->id;
