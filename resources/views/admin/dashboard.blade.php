@@ -31,7 +31,7 @@
                 </div>
             @else
                 <div class="w-[200px]">
-                    <div class="">
+                   <div class="px-5">
                         Guest (No Points)
                     </div>
                 </div>
@@ -40,10 +40,16 @@
             <div class="flex items-center gap-16 px-6 ">
                 <div class="relative">
 
-                <a href="/admin/books" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
-                    Books
-                </a>
-            </div>
+                    <a href="/admin/user" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                        Users
+                    </a>
+                </div>
+                <div class="relative">
+
+                    <a href="/admin/books" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                        Books
+                    </a>
+                </div>
 
                 <div class="relative">
 
@@ -55,9 +61,16 @@
 
                 <a href="/admin/loans" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
                     Loans
-                </a>                
-            </div>
+                </a>    
+                            
+                 </div>
+                 <div class="relative">
 
+                    <a href="/admin/kategori" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                        Kategori
+                    </a>    
+                                
+                </div>
 
             </div>
 
@@ -100,146 +113,131 @@
                             <div class="flex gap-10">
                                 <div class="">
                                     <h2 class="text-xl font-bold">Book Loaned</h2>
-                                    <div class="bg-[#222222] shadow-2xl text-white p-5 w-[24rem] text-3xl py-14 rounded-md font-semibold">
-                                        <p>50 Books</p>
+                                    <div class="bg-[#222222] shadow-2xl text-white p-5 w-[36rem] text-3xl py-14 rounded-md font-semibold">
+                                        <p>{{$countLoan}} Books</p>
                                     </div>
                                 </div>
                                 <div class="">
                                     <h2 class="text-xl font-bold">Book Returned</h2>
-                                    <div class="bg-[#222222] shadow-2xl text-white p-5 w-[24rem] text-3xl py-14 rounded-md font-semibold">
+                                    <div class="bg-[#222222] shadow-2xl text-white p-5 w-[36rem] text-3xl py-14 rounded-md font-semibold">
+                                        <p>{{$booksReturned}} Books</p>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <h2 class="text-xl font-bold">Visitors</h2>
+                                    <div class="bg-[#222222] shadow-2xl text-white p-5 w-[36rem] text-3xl py-14 rounded-md font-semibold">
                                         <p>50 Books</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-5">
-                                <div class="flex flex-col gap-2">
-                                    <p class="text-3xl font-bold">Books</p>
-                                    <input id="searchBooks" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-8" 
-                                    type="text" placeholder="Search Books">
-                                </div>
+                            <div class="flex items-center justify-between w-full">
+
+                                <div class="mt-5">
+                                    <div class="flex items-end justify-between">                                        
+                                        <p class="text-3xl font-bold">Books</p>
+                                        <input id="searchBooks" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-8" 
+                                        type="text" placeholder="Search Books">
+                                    </div>
+                                    
+                                    <div class="py-4 overflow-x-auto overflow-y-scroll max-h-[38rem]">
+                                        <table class="border-collapse table-auto  w-[808px]"  id="booksTable">
+                                            <thead class="text-white border border-black bg-[#2D2D2D]">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
+                                                    <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Book Name</th>
+                                                    <th class="px-4 py-2 text-left border-r border-black border-3">Author</th>
+                                                    <th class="px-4 py-2 text-left border-r border-black border-3">Total Loan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $no = 1
+                                                @endphp
+                                                @foreach($book as $books)
+                                                <tr class="border border-b border-black hover:bg-gray-100">
+                                                    <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
+                                                    <td class="px-4 py-2 border-r border-black" colspan="2">{{$books->title}}</td>
+                                                    <td class="px-4 py-2 border-r border-black">{{$books->author}}</td>
+                                                    <td class="px-4 py-2 border-r border-black">{{$books->total_loan ?? 0}}</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>    
+                                <div class="">
+                                    <div class="">
+                                        <div class="flex items-end justify-between">
+                                            <p class="text-3xl font-bold">Loaned Books</p>
+                                            <input id="searchLoaned" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
+                                            type="text" placeholder="Search Loaned Books">                                </div>
+                                        <div class="py-4 overflow-x-auto ">
+                                            <table class="border-collapse table-auto  w-[808px]" id="loanedTable">
+                                                <thead class="text-white border border-black bg-[#2D2D2D]">
+                                                    <tr>
+                                                        <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
+                                                        <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Book Name</th>
+                                                        <th class="px-4 py-2 text-left border-r border-black border-3">User</th>
+                                                        <th class="px-4 py-2 text-left border-r border-black border-3">Loaned Date</th>
+                                                        <th class="px-4 py-2 text-left border-black border-3">Due Date</th>
+        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @php
+                                                        $no = 1
+                                                    @endphp
+                                                    @foreach($loan as $loans)
+                                                    <tr class="border border-b border-black hover:bg-gray-100">
+                                                        <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
+                                                        <td class="px-4 py-2 border-r border-black" colspan="2">{{$loans->book->title}}</td>
+                                                        <td class="px-4 py-2 border-r border-black">{{$loans->book->author}}</td>
+                                                        <td class="px-4 py-2 border-r border-black">{{$loans->tanggal_pinjam}}</td>
+                                                        <td class="px-4 py-2 border-r border-black">{{$loans->tanggal_tenggat}}</td>
+                                                       
+                                                    </tr>
+                                                    @endforeach
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <div class="flex items-end justify-between">
+                                            <p class="text-3xl font-bold">Visitors</p>
+                                            <input id="searchLoaned" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
+                                            type="text" placeholder="Search Loaned Books">                                </div>
+                                        <div class="py-4 overflow-x-auto ">
+                                            <table class="border-collapse table-auto  w-[808px]" id="loanedTable">
+                                                <thead class="text-white border border-black bg-[#2D2D2D]">
+                                                    <tr>
+                                                        <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
+                                                        <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">User</th>
+                                                        <th class="px-4 py-2 text-left border-r border-black border-3">Time Stamp</th>
+                                                        
+        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @php
+                                                        $no = 1
+                                                    @endphp
+                                                    <tr class="border border-b border-black hover:bg-gray-100">
+                                                        <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
+                                                        <td class="px-4 py-2 border-r border-black" colspan="2">Edgar Manuello</td>
+                                                        <td class="px-4 py-2 border-r border-black">2024-12-31 12:00:00</td>
+                                                          
+                                                        </td>
+                                                    </tr>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>   
                                 
-                                <div class="py-4 overflow-x-auto overflow-y-scroll max-h-[38rem]">
-                                    <table class="border-collapse table-auto  w-[808px]"  id="booksTable">
-                                        <thead class="text-white border border-black bg-[#2D2D2D]">
-                                            <tr>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Book Name</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Author</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                                $no = 1
-                                            @endphp
-                                            @foreach($book as $books)
-                                            <tr class="border border-b border-black hover:bg-gray-100">
-                                                <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
-                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$books->title}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$books->author}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$books->status}}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>    
-                        </div>
-                        <div class="">
-                            <div class="">
-                                <div class="flex items-end justify-between">
-                                    <p class="text-3xl font-bold">Loaned Books</p>
-                                    <input id="searchLoaned" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
-                                    type="text" placeholder="Search Loaned Books">                                </div>
-                                <div class="py-4 overflow-x-auto ">
-                                    <table class="border-collapse table-auto  w-[808px]" id="loanedTable">
-                                        <thead class="text-white border border-black bg-[#2D2D2D]">
-                                            <tr>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Book Name</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">User</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Loaned Date</th>
-                                                <th class="px-4 py-2 text-left border-black border-3">Due Date</th>
-                                                <th class="px-4 py-2 text-left border-black border-3">Action</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                                $no = 1
-                                            @endphp
-                                            @foreach($loan as $loans)
-                                            <tr class="border border-b border-black hover:bg-gray-100">
-                                                <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
-                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$loans->book->title}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$loans->book->author}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$loans->tanggal_pinjam}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$loans->tanggal_tenggat}}</td>
-                                                <td class="px-4 py-4 text-center border-black">
-                                                    <button
-                                                    class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
-                                                    data-loan-id="{{$loans->id_loan}}"
-                                                    data-book-title="{{$loans->book->title}}"
-                                                    data-tanggal-tenggat="{{$loans->tanggal_tenggat}}"
-                                                    id="openModalButton"
-                                                    >
-                                                        Return
-                                                    </button>                                                
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                            
-                                        </tbody>
-                                    </table>
-                                </div>
                             </div>
-                            <div class="">
-                                <div class="flex items-end justify-between">
-                                    <p class="text-3xl font-bold">Waitlisted Books</p>
-                                    <input id="searchWaitlisted" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
-                                    type="text" placeholder="Search Waitlisted Books">
-                                                                </div>
-                                <div class="py-4 overflow-x-auto">
-                                    <table class="border-collapse table-auto w-[808px]" id="waitlistedTable">
-                                        <thead class="text-white border border-black bg-[#2D2D2D]">
-                                            <tr>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
-                                                <th class="px-4 py-2 text-left">Book Name</th>
-
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">User</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Loaned Date</th>
-                                                <th class="px-4 py-2 text-left border-black border-3">Due Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                            $no = 1
-                                            @endphp
-                                            @foreach($loanWait as $loan)
-                                            <tr class="border border-b border-black hover:bg-gray-100">
-                                                <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$loan->book->title}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$loan->user->name}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$loan->tanggal_pinjam}}</td>
-                                                <td class="px-4 py-2 border-r border-black">
-                                                    <!-- Dynamic ID for Date Input -->
-                                                    <input
-                                                        type="date"
-                                                        name="selected_date"
-                                                        class="px-2 py-1 border rounded"
-                                                        id="dateInput-{{$loan->id_loan}}"
-                                                        data-loan-id="{{$loan->id_loan}}"
-                                                    />
-                                                </td>
-                                            </tr>
-                                            
-                                            @endforeach
-                                            
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>    
-                        </div>   
+                        </div>
                      </div>   
                 </div>
             </div>

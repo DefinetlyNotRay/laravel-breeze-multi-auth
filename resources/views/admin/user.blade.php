@@ -31,7 +31,7 @@
                 </div>
             @else
                 <div class="w-[200px]">
-                    <div class="">
+                   <div class="px-5">
                         Guest (No Points)
                     </div>
                 </div>
@@ -40,14 +40,20 @@
             <div class="flex items-center gap-16 px-6 ">
                 <div class="relative">
 
-                <a href="/admin/books" class="mx-auto font-bold text-gray-800 active text-md hover:text-gray-800/70 hover:text-gray-900">
+                    <a href="/admin/user" class="mx-auto font-bold text-gray-800 active text-md hover:text-gray-800/70 hover:text-gray-900">
+                        Users
+                    </a>
+                </div>
+                <div class="relative">
+
+                <a href="/admin/books" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
                     Books
                 </a>
             </div>
 
                 <div class="relative">
 
-                    <a href="/admin/dashboard" class="mx-auto font-bold text-center text-gray-800 text-md  hover:text-gray-900">
+                    <a href="/admin/dashboard" class="mx-auto font-bold text-center text-gray-800 text-md hover:text-gray-900">
                         Dashboard
                     </a>
                 </div>
@@ -57,7 +63,13 @@
                     Loans
                 </a>                
             </div>
+   <div class="relative">
 
+                <a href="/admin/kategori" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                    Kategori
+                </a>    
+                            
+            </div>
 
             </div>
 
@@ -98,13 +110,13 @@
                      <div class="flex">
                         <div class="flex flex-col items-start w-full">
                             <div class="w-full mt-5">
-                                <p class="text-3xl font-bold">Books</p>
+                                <p class="text-3xl font-bold">User</p>
                                 <div class="flex items-center justify-between gap-2">
                                     <input id="searchBooks" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-8" 
                                     type="text" placeholder="Search Books">
-                                    <button                                                     id="openModalButton"
+                                    <button id="openModalButton"
                                     class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
-                                        Add Book
+                                        Add User
                                     </button>
                                 </div>
                                 
@@ -113,8 +125,10 @@
                                         <thead class="text-white border border-black bg-[#2D2D2D]">
                                             <tr>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Name</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Name</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Gmail</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Role</th>
+
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Password</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Action</th>
 
@@ -127,13 +141,13 @@
                                             @foreach($users as $users)
                                             <tr class="border border-b border-black hover:bg-gray-100">
                                                 <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
-                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$users->name}}</td>
-                                           <td class="px-4 py-2 border-r border-black">
-                                                    <span class="full-desc hidden">{{ $users->email }}</span>
+                                                <td class="px-4 py-2 border-r border-black">{{$users->name}}</td>
+                                                <td class="px-4 py-2 border-r border-black">
+                                                   {{ $users->email }}
                                                 </td>
                                                 <td class="px-4 py-2 border-r border-black" >{{$users->role}}</td>
                                                 <td class="px-4 py-2 border-r border-black">{{$users->password}}</td>
-                                                <td class="px-4 py-2 border-r  flex flex-col gap-5 border-black">
+                                                <td class="flex justify-center gap-5 px-4 py-2 border-r border-black">
                                                     <button
                                                         class="px-4 py-2 text-white bg-green-500 rounded openEditModal hover:bg-green-600"
                                                         data-id="{{$users->id}}"
@@ -146,16 +160,15 @@
                                                     >
                                                         Edit
                                                     </button>
-                                                    <form action="/delete/user/{{$users->id}}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button
-                                                            type="submit"
-                                                            class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </form>
+                                                    <button
+                                                    type="button"
+                                                    class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+                                                    id="openDeleteModal"
+                                                    data-id="{{$users->id}}"
+                                                >
+                                                    Delete
+                                                </button>
+                                                
                                                     
                                                 </td>
 
@@ -170,90 +183,190 @@
                 
     </div>
 </div>
-
 <div
-    id="editModal"
+    id="openModal"
+    class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg w-[30rem] p-6">
+            <h2 class="mb-4 text-lg font-semibold">Add User</h2>
+            <form id="addForm" action="/add/admin/user" method="POST">
+                @csrf
+                <!-- Name -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Name:</label>
+                    <input
+                        type="text"
+                        id="nameInputs"
+                        name="name"
+                        class="w-full px-3 py-2 border rounded"
+                    />
+                </div>
+
+                <!-- Email -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Email:</label>
+                    <input
+                        type="email"
+                        id="emailInputs"
+                        name="email"
+                        class="w-full px-3 py-2 border rounded"
+                    />
+                </div>
+
+                <!-- Role -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Role:</label>
+                    <select
+                        id="roleInputs"
+                        name="role"
+                        class="w-full px-3 py-2 border rounded"
+                    >
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Password:</label>
+                    <input
+                        type="password"
+                        id="passwordInputs"
+                        name="password"
+                        class="w-full px-3 py-2 border rounded"
+                    />
+                </div>
+
+                <!-- Hidden ID Field -->
+                <input type="hidden" id="userIdInputs" name="id" />
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end gap-4">
+                    <button
+                        type="button"
+                        id="cancelEditButtons"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+                    >
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div
+    id="deleteConfirmationModal"
     class="fixed inset-0 flex items-center justify-center hidden bg-black bg-opacity-50"
 >
     <div class="p-6 bg-white rounded-lg shadow-lg w-96">
-        <h2 class="mb-4 text-lg font-semibold">Edit Book</h2>
-        <form id="returnForm" action="/edit/admin/books" method="POST">
+        <h2 class="mb-4 text-lg font-semibold">Confirm Deletion</h2>
+        <p class="mb-4 text-gray-600">
+            Are you sure you want to delete this user? This action cannot be undone.
+        </p>
+        <form id="deleteUserForm" method="POST">
             @csrf
-
-            <!-- Book Title -->
-            <div class="mb-4">
-                <label class="block text-gray-700">Book Title:</label>
-                <input type="text" id="title" name="title" class="w-full px-3 py-2 border rounded" />
-
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-gray-700">Description</label>
-                <input type="text" id="desc" name="desc" class="w-full px-3 py-2 border rounded" />
-
-            </div>
-
-            <!-- Tanggal Tenggat -->
-            <div class="mb-4">
-                    <label class="block text-gray-700">Author</label>
-                    <input type="text" id="author" name="author" class="w-full px-3 py-2 border rounded" />
-
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700">Category</label>
-                    <select
-                        name="Category"
-                        class="w-full px-3 py-2 border rounded"
-                        id="categorySelect"
-                        onchange="toggleNewCategoryInput()"
-                    >
-                        
-                        <option value="new">Add New Category</option>
-                    </select>
-            
-                <input
-                    type="text"
-                    id="newCategoryInput"
-                    name="newCategory"
-                    placeholder="Enter new category"
-                    class="hidden w-full px-3 py-2 mt-2 border rounded"
-                />
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700">Cover</label>
-                <input
-                    type="file"
-                    id="coverInput"
-                    name="cover"
-                    class="w-full px-3 py-2 border rounded"
-                    onchange="uploadImageToCloudinary(this)"
-                />
-            </div>
-            <div id="spinner" class="flex items-center justify-center hidden mt-4">
-                <div class="w-8 h-8 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
-                <span class="ml-2 text-blue-500">Uploading...</span>
-            </div>
-            <input type="hidden" id="uploadedImageUrls" name="uploadedImageUrl" />
-            <input type="hidden" id="id" name="id" />
-
-            <!-- Action Buttons -->
+            @method('DELETE')
             <div class="flex justify-end gap-4">
                 <button
                     type="button"
-                    id="cancelModalButtonss"
+                    id="cancelDeleteButton"
                     class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
                 >
                     Cancel
                 </button>
                 <button
                     type="submit"
-                    class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+                    class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
                 >
                     Confirm
                 </button>
             </div>
         </form>
     </div>
+</div>
+
+<div
+    id="editModal"
+    class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg w-[30rem] p-6">
+            <h2 class="mb-4 text-lg font-semibold">Edit User</h2>
+            <form id="editForm" action="/edit/admin/user" method="POST">
+                @csrf
+                <!-- Name -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Name:</label>
+                    <input
+                        type="text"
+                        id="nameInput"
+                        name="name"
+                        class="w-full px-3 py-2 border rounded"
+                    />
+                </div>
+
+                <!-- Email -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Email:</label>
+                    <input
+                        type="email"
+                        id="emailInput"
+                        name="email"
+                        class="w-full px-3 py-2 border rounded"
+                    />
+                </div>
+
+                <!-- Role -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Role:</label>
+                    <select
+                        id="roleInput"
+                        name="role"
+                        class="w-full px-3 py-2 border rounded"
+                    >
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Password:</label>
+                    <input
+                        type="password"
+                        id="passwordInput"
+                        name="password"
+                        class="w-full px-3 py-2 border rounded"
+                    />
+                </div>
+
+                <!-- Hidden ID Field -->
+                <input type="hidden" id="userIdInput" name="id" />
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end gap-4">
+                    <button
+                        type="button"
+                        id="cancelEditButton"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+                    >
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
         </main>
         <script>
@@ -276,36 +389,27 @@
             });
         });
     });
-async function uploadImageToCloudinary(input) {
-    const file = input.files[0];
-    if (!file) return;
+    document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("deleteConfirmationModal");
+        const openDeleteButtons = document.querySelectorAll("#openDeleteModal");
+        const cancelDeleteButton = document.getElementById("cancelDeleteButton");
+        const deleteUserForm = document.getElementById("deleteUserForm");
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'my_upload_preset'); // Replace with your Cloudinary upload preset
-    const spinner = document.getElementById('spinner');
-    spinner.classList.remove('hidden'); // Show the spinner
-    try {
-        const response = await fetch('https://api.cloudinary.com/v1_1/dezla8wit/image/upload', {
-            method: 'POST',
-            body: formData,
+        // Open modal when delete button is clicked
+        openDeleteButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const userId = button.getAttribute("data-id");
+                deleteUserForm.action = `/delete/user/${userId}`;
+                modal.classList.remove("hidden");
+            });
         });
 
-        const data = await response.json();
+        // Close modal when cancel button is clicked
+        cancelDeleteButton.addEventListener("click", () => {
+            modal.classList.add("hidden");
+        });
+    });
 
-        if (response.ok) {
-            document.getElementById('uploadedImageUrl').value = data.secure_url;
-            alert('Image uploaded successfully!');
-        } else {
-            alert('Image upload failed: ' + data.error.message);
-        }
-    } catch (err) {
-        console.error(err);
-        alert('An error occurred while uploading the image.');
-    }finally {
-        spinner.classList.add('hidden'); // Hide the spinner
-    }
-}
 function toggleNewCategoryInput() {
     const select = document.getElementById('categorySelect');
     const newCategoryInput = document.getElementById('newCategoryInput');
@@ -339,64 +443,75 @@ const openEditButton = document.querySelectorAll("#openEditModal");
 const editModal = document.getElementById("editModal");
 
 // Form fields in the modal
-const titleInput = document.getElementById("title");
-const authorInput = document.getElementById("author");
-const descInput = document.getElementById("desc");
-const categorySelect = document.getElementById("categorySelect");
-const newCategoryInput = document.getElementById("desc");
 
-const openModalButtons = document.querySelectorAll("#openModalButton");
+document.addEventListener("DOMContentLoaded", () => {
+    const editModal = document.getElementById("editModal");
+    const cancelEditButton = document.getElementById("cancelEditButton");
+    const editButtons = document.querySelectorAll(".openEditModal");
 
-const cancelModalButton = document.getElementById("cancelModalButton");
-const cancelModalButtonss = document.getElementById("cancelModalButtonss");
-const dendaInput = document.getElementById("dendaInput");
-// Open modal with autofilled data
-openEditButton.forEach((button) => {
-    button.addEventListener("click", () => {
-        // Retrieve data attributes
-        const bookId = button.getAttribute("data-id");
-        const title = button.getAttribute("data-title");
-        const desc = button.getAttribute("data-desc");
-        const cover = button.getAttribute("data-cover");
-        const author = button.getAttribute("data-author");
-        const categoryId = button.getAttribute("data-category");
+    const nameInput = document.getElementById("nameInput");
+    const emailInput = document.getElementById("emailInput");
+    const roleInput = document.getElementById("roleInput");
+    const passwordInput = document.getElementById("passwordInput");
+    const userIdInput = document.getElementById("userIdInput");
 
-        // Debugging: Log to check if data is correctly retrieved
-        console.log("Title:", title, "Author:", author, "Description:", desc, "Category ID:", categoryId, "cover:", cover);
+    // Open Modal
+    editButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            // Retrieve data attributes from the button
+            const userId = button.getAttribute("data-id");
+            const userName = button.getAttribute("data-name");
+            const userEmail = button.getAttribute("data-email");
+            const userRole = button.getAttribute("data-role");
+            const userPassword = button.getAttribute("data-password");
 
-        // Populate modal inputs
-        titleInput.value = title;
-        document.getElementById("id").value = bookId;
-        document.getElementById("author").value = author || "";
-        document.getElementById("desc").value = desc || "";
-        document.getElementById("uploadedImageUrls").value = cover || "";
-        const categorySelect = document.getElementById("categorySelect");
+            // Fill the modal inputs
+            nameInput.value = userName;
+            emailInput.value = userEmail;
+            roleInput.value = userRole;
+            passwordInput.value = userPassword;
+            userIdInput.value = userId;
 
-        // Set category or show new category input
-        // Set category or show new category input
-        if (categoryId === "new") {
-            document.getElementById("newCategoryInput").classList.remove("hidden");
-            document.getElementById("newCategoryInput").value = ""; // Clear new category input
-        } else {
-            document.getElementById("newCategoryInput").classList.add("hidden");
-            categorySelect.value = categoryId || ""; // Set existing category as selected
-        }
+            // Show the modal
+            editModal.classList.remove("hidden");
+        });
+    });
+
+    // Close Modal
+    cancelEditButton.addEventListener("click", () => {
+        editModal.classList.add("hidden");
+    });
+});
+document.addEventListener("DOMContentLoaded", () => {
+    const editModal = document.getElementById("openModal");
+    const cancelEditButton = document.getElementById("cancelEditButtons");
+    const openModal = document.getElementById("openModalButton");
+
+    const button = document.querySelectorAll(".openEditModal");
+
+    const nameInput = document.getElementById("nameInput");
+    const emailInput = document.getElementById("emailInput");
+    const roleInput = document.getElementById("roleInput");
+    const passwordInput = document.getElementById("passwordInput");
+    const userIdInput = document.getElementById("userIdInput");
+
+    // Open Modal
+    openModal.addEventListener("click", () => {
+          
+            // Show the modal
+            editModal.classList.remove("hidden");
+        });
 
 
-        // Show the modal
-        document.getElementById("editModal").classList.remove("hidden");
+    // Close Modal
+    cancelEditButton.addEventListener("click", () => {
+        editModal.classList.add("hidden");
     });
 });
 
 
 
 
-
-openModalButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-        modal.classList.remove("hidden");
-    });
-});
 cancelModalButtonss.addEventListener("click", () => {
     modals.classList.add("hidden");
 });

@@ -36,11 +36,10 @@
                     </div>
                 </div>
             @endif
-            
             <!-- Home link, perfectly centered -->
             <div class="flex items-center gap-16 px-6 ">
                 <div class="relative">
-
+                    
                     <a href="/admin/user" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
                         Users
                     </a>
@@ -60,16 +59,17 @@
                 </div>
                 <div class="relative">
 
-                <a href="/admin/loans" class="mx-auto font-bold text-gray-800 text-md active hover:text-gray-800/70 hover:text-gray-900">
+                <a href="/admin/loans" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
                     Loans
                 </a>                
-            </div>    <div class="relative">
+            </div>
+            <div class="relative">
 
-                    <a href="/admin/kategori" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
-                        Kategori
-                    </a>    
-                                
-                </div>
+                <a href="/admin/kategori" class="mx-auto font-bold text-gray-800 text-md active hover:text-gray-800/70 hover:text-gray-900">
+                    Kategori
+                </a>    
+                            
+            </div>
 
             </div>
 
@@ -115,38 +115,24 @@
                                             <div class="flex flex-col">
                                                 <p class="text-3xl font-bold">Loans</p>
                                                 <div class="flex gap-5">
+                                                    
                                                     <div class="">
 
                                                         <p class="font-semibold">
-                                                            Cari Buku
-                                                        </p>
-                                                        <input id="searchBooks" class="mb-2 search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
-                                                        type="text" placeholder="Search">
-                                                    </div>
-                                                    <div class="">
-
-                                                        <p class="font-semibold">
-                                                            Cari User
+                                                            Cari Category
                                                         </p>
                                                         <input id="searchUser" class="mb-2 search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
                                                         type="text" placeholder="Search">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="">
-                                                <p>Date-1</p>
-                                                <input         id="dateFilter" 
-                                                class="mb-2 search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
-                                                type="date">
-                                            </div>
+                                           
                                            
                                         </div>
-                                        <button
-                                        id="printButton"
-                                        class="px-10 mb-[0.4rem] py-[0.1rem] mt-5 text-white bg-green-500 rounded-md hover:bg-green-700"
-                                    >
-                                        Print Laporan
-                                    </button>
+                                        <button                                                     id="openModalButton"
+                                        class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
+                                            Add Book
+                                        </button>
                                     </div>
                                     <div class=" overflow-x-auto overflow-y-scroll max-h-[38rem]">
 
@@ -154,28 +140,40 @@
                                         <thead class="text-white border border-black bg-[#2D2D2D]">
                                             <tr>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">User</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Book Title</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Tanggal Pinjam</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Tanggal Tenggat</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Status</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">Nama Category</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @php
                                                 $no = 1
                                             @endphp
-                                            @foreach($loans as $loans)
+                                            @foreach($category as $category)
                                             <tr class="border border-b border-black hover:bg-gray-100">
                                                 <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
-                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$loans->user->name}}</td>
-                                                <td class="px-4 py-2 border-r border-black">
-                                                    {{ $loans->book->title }}
-                                                </td>
-                                                <td class="px-4 py-2 border-r border-black" >{{$loans->tanggal_pinjam}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$loans->tanggal_tenggat}}</td>
-                                                <td class="px-4 py-2 border-r border-black">
-                                                    {{ $loans->status }}
+                                                <td class="px-4 py-2 border-r border-black" colspan="2">{{$category->nama_category}}</td>
+                                                <td class="flex justify-center gap-5 px-4 py-2 border-r border-black">
+                                                    <button
+                                                        class="px-4 py-2 text-white bg-green-500 rounded openEditModal hover:bg-green-600"
+                                                        data-id="{{$category->id_category}}"
+                                                        data-title="{{$category->nama_category}}"
+
+                                                        id="openEditModal"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    
+                                                    <form action="/delete/category/{{$category->id_category}}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button
+                                                            type="submit"
+                                                            class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                    
                                                 </td>
                                        
                                             </tr>
@@ -189,7 +187,86 @@
                 
     </div>
 </div>
+<div
+    id="returnModal"
+    class="fixed inset-0 flex items-center justify-center hidden bg-black bg-opacity-50"
+>
+    <div class="p-6 bg-white rounded-lg shadow-lg w-96">
+        <h2 class="mb-4 text-lg font-semibold">Create Category</h2>
+        <form id="returnForm" action="/add/admin/category" method="POST">
+            @csrf
 
+            <!-- Book Title -->
+            <div class="mb-4">
+                <label class="block text-gray-700">Category Name:</label>
+                <input
+                    type="text"
+                    id="titles"
+                    name="title"
+                    class="w-full px-3 py-2 border rounded"
+                        
+                />
+            </div>
+
+           
+            <!-- Action Buttons -->
+            <div class="flex justify-end gap-4">
+                <button
+                    type="button"
+                    id="cancelModalButton"
+                    class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+                >
+                    Confirm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div
+    id="editModal"
+    class="fixed inset-0 flex items-center justify-center hidden bg-black bg-opacity-50"
+>
+    <div class="p-6 bg-white rounded-lg shadow-lg w-96">
+        <h2 class="mb-4 text-lg font-semibold">Edit Category</h2>
+        <form id="returnForm" action="/edit/admin/category" method="POST">
+            @csrf
+
+            <!-- Book Title -->
+            <div class="mb-4">
+                <label class="block text-gray-700">Category:</label>
+                <input type="text" id="title" name="title" class="w-full px-3 py-2 border rounded" />
+
+            </div>
+
+           
+            <input type="hidden" id="uploadedImageUrls" name="uploadedImageUrl" />
+            <input type="hidden" id="id" name="id" />
+
+            <!-- Action Buttons -->
+            <div class="flex justify-end gap-4">
+                <button
+                    type="button"
+                    id="cancelModalButtonss"
+                    class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+                >
+                    Confirm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
         </main>
        <!-- Include jsPDF from CDN -->
 <!-- Include jsPDF -->
@@ -198,119 +275,7 @@
 <!-- Include jsPDF AutoTable plugin -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js" integrity="sha512-PRJxIx+FR3gPzyBBl9cPt62DD7owFXVcfYv0CRNFAcLZeEYfht/PpPNTKHicPs+hQlULFhH2tTWdoxnd1UGu1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-  // Wait for the entire window to load to ensure all resources are loaded
-  window.onload = function() {
-    document.getElementById('printButton').addEventListener('click', function() {
-      const { jsPDF } = window.jspdf; // Access jsPDF from the window object
-      const doc = new jsPDF(); // Create a new PDF instance
-
-      // Add a title to the PDF
-      doc.text("Report: Loan Details", 20, 10);
-
-      // Ensure autoTable is available
-      if (typeof doc.autoTable === 'function') {
-        // Use autoTable to add the table to the PDF
-        doc.autoTable({
-          html: '#booksTable', // Target the table by ID
-          startY: 20,  // Position the table below the title
-          styles: {
-            fontSize: 10,  // Set font size for readability
-            cellPadding: 2,  // Cell padding for spacing
-          },
-          columnStyles: {
-            // Adjust column widths (in mm)
-            0: { cellWidth: 10 },  // First column (No) width
-            1: { cellWidth: 10 },  // Second column (User) width
-            2: { cellWidth: 30 },  // Third column (User) width
-            3: { cellWidth: 40 },  // Fourth column (Book Title) width
-            4: { cellWidth: 30 },  // Fifth column (Tanggal Pinjam) width
-            5: { cellWidth: 30 },  // Sixth column (Tanggal Tenggat) width
-            6: { cellWidth: 30 },  // Seventh column (Status) width
-          }
-        });
-      } else {
-        console.error("autoTable plugin is not available.");
-      }
-
-      // Save the PDF with the name 'laporan-loan-details.pdf'
-      doc.save('laporan-loan-details.pdf');
-    });
-  };
-
-
-
-document.getElementById('dateFilter').addEventListener('input', function () {
-    const selectedDate = this.value; // The selected date from the input in YYYY-MM-DD format
-    const table = document.getElementById('booksTable');
-    const rows = table.querySelectorAll('tbody tr');
-
-    // Wait until the rows are fully rendered and accessible
-    setTimeout(() => {
-    if (!selectedDate) {
-        rows.forEach(row => {
-            row.style.display = ''; // Reset to default, showing all rows
-        });
-    } else {
-
-            rows.forEach(row => {
-                const tanggalPinjamCell = row.cells[3]; // Get the 5th column for Tanggal Pinjam
-                const tanggalPinjam = tanggalPinjamCell.textContent.trim(); // Trim to remove any extra spaces
-                
-                console.log("Comparing:", tanggalPinjam, "with", selectedDate);
-                
-                // Check if the date matches
-                if (tanggalPinjam === selectedDate) {
-                    row.style.display = ''; // Show row if it matches
-                } else {
-                    row.style.display = 'none'; // Hide row if it doesn't match
-                }
-            });
-        }
-    }, 100); // Delay added to ensure the table is fully loaded
-});
-
-document.querySelectorAll('input[type="date"]').forEach(input => {
-    input.addEventListener('input', function () {
-        const date1 = document.querySelectorAll('input[type="date"]')[0].value; // Date-1 input
-        const rows = document.querySelectorAll('#booksTable tbody tr');
-
-        rows.forEach(row => {
-            const tanggalPinjamText = row.cells[4]?.textContent.trim(); // Ensure the cell exists (adjusted for the correct column index)
-
-            // Skip row if tanggalPinjamText is empty or invalid
-            if (!tanggalPinjamText) {
-                row.style.display = 'none';
-                return;
-            }
-
-            // Parse both dates as ISO strings (YYYY-MM-DD)
-            const tanggalPinjam = tanggalPinjamText.split('T')[0]; // Extract date part (if T included)
-            const date1Parsed = date1 ? date1 : null;
-
-            // Check if the dates are exactly the same
-            const isExactMatch = tanggalPinjam >= date1Parsed;
-
-            // Display or hide rows based on the filtering criteria
-            row.style.display = isExactMatch ? '' : 'none';
-        });
-    });
-});
-
-
-
-
-        document.querySelectorAll('.search-input').forEach((input) => {
-        input.addEventListener('input', function () {
-            const searchTerm = this.value.toLowerCase();
-            const tableId = this.id.replace('search', '').toLowerCase() + 'Table'; // e.g., searchBooks -> booksTable
-            const rows = document.querySelectorAll(`#${tableId} tbody tr`);
-
-            rows.forEach(row => {
-                const rowText = Array.from(row.cells).map(cell => cell.textContent.toLowerCase()).join(' ');
-                row.style.display = rowText.includes(searchTerm) ? '' : 'none';
-            });
-        });
-    });
+  
     document.querySelector('#searchUser').addEventListener('input', function () {
     const searchTerm = this.value.toLowerCase();
     const rows = document.querySelectorAll('#booksTable tbody tr');
@@ -405,10 +370,7 @@ const editModal = document.getElementById("editModal");
 
 // Form fields in the modal
 const titleInput = document.getElementById("title");
-const authorInput = document.getElementById("author");
-const descInput = document.getElementById("desc");
-const categorySelect = document.getElementById("categorySelect");
-const newCategoryInput = document.getElementById("desc");
+
 
 const openModalButtons = document.querySelectorAll("#openModalButton");
 
@@ -421,32 +383,17 @@ openEditButton.forEach((button) => {
         // Retrieve data attributes
         const bookId = button.getAttribute("data-id");
         const title = button.getAttribute("data-title");
-        const desc = button.getAttribute("data-desc");
-        const cover = button.getAttribute("data-cover");
-        const author = button.getAttribute("data-author");
-        const categoryId = button.getAttribute("data-category");
+      
 
         // Debugging: Log to check if data is correctly retrieved
-        console.log("Title:", title, "Author:", author, "Description:", desc, "Category ID:", categoryId, "cover:", cover);
 
         // Populate modal inputs
         titleInput.value = title;
         document.getElementById("id").value = bookId;
-        document.getElementById("author").value = author || "";
-        document.getElementById("desc").value = desc || "";
-        document.getElementById("uploadedImageUrls").value = cover || "";
+     
         const categorySelect = document.getElementById("categorySelect");
 
-        // Set category or show new category input
-        // Set category or show new category input
-        if (categoryId === "new") {
-            document.getElementById("newCategoryInput").classList.remove("hidden");
-            document.getElementById("newCategoryInput").value = ""; // Clear new category input
-        } else {
-            document.getElementById("newCategoryInput").classList.add("hidden");
-            categorySelect.value = categoryId || ""; // Set existing category as selected
-        }
-
+       
 
         // Show the modal
         document.getElementById("editModal").classList.remove("hidden");

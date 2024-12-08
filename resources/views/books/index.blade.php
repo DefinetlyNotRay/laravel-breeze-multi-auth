@@ -26,7 +26,7 @@
                 </div>
             @else
                 <div class="w-[200px]">
-                    <div class="">
+                   <div class="px-5">
                         Guest (No Points)
                     </div>
                 </div>

@@ -31,13 +31,19 @@
                 </div>
             @else
                 <div class="w-[200px]">
-                    <div class="">
+                   <div class="px-5">
                         Guest (No Points)
                     </div>
                 </div>
             @endif
             <!-- Home link, perfectly centered -->
             <div class="flex items-center gap-16 px-6 ">
+                <div class="relative">
+
+                    <a href="/admin/user" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                        Users
+                    </a>
+                </div>
                 <div class="relative">
 
                 <a href="/admin/books" class="mx-auto font-bold text-gray-800 active text-md hover:text-gray-800/70 hover:text-gray-900">
@@ -47,7 +53,7 @@
 
                 <div class="relative">
 
-                    <a href="/admin/dashboard" class="mx-auto font-bold text-center text-gray-800 text-md  hover:text-gray-900">
+                    <a href="/admin/dashboard" class="mx-auto font-bold text-center text-gray-800 text-md hover:text-gray-900">
                         Dashboard
                     </a>
                 </div>
@@ -57,7 +63,13 @@
                     Loans
                 </a>                
             </div>
+            <div class="relative">
 
+                <a href="/admin/kategori" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                    Kategori
+                </a>    
+                            
+            </div>
 
             </div>
 
@@ -117,7 +129,7 @@
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Description</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Category</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Author</th>
-                                                <th class="px-4 py-2 text-left border-r border-black border-3">Status</th>
+                                                <th class="px-4 py-2 text-left border-r border-black border-3">Total Loans</th>
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Action</th>
 
                                             </tr>
@@ -132,13 +144,13 @@
                                                 <td class="px-4 py-2 border-r border-black" colspan="2">{{$books->title}}</td>
                                            <td class="px-4 py-2 border-r border-black">
                                                     <span class="short-desc">{{ \Illuminate\Support\Str::words($books->desc, 20, '...') }}</span>
-                                                    <span class="full-desc hidden">{{ $books->desc }}</span>
-                                                    <a href="#" class="see-more text-blue-500">See more</a>
+                                                    <span class="hidden full-desc">{{ $books->desc }}</span>
+                                                    <a href="#" class="text-blue-500 see-more">See more</a>
                                                 </td>
                                                 <td class="px-4 py-2 border-r border-black" >{{$books->category->nama_category}}</td>
                                                 <td class="px-4 py-2 border-r border-black">{{$books->author}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$books->status}}</td>
-                                                <td class="px-4 py-2 border-r  flex flex-col gap-5 border-black">
+                                                <td class="px-4 py-2 border-r border-black">{{$books->total_loan ?? 0}}</td>
+                                                <td class="flex flex-col gap-5 px-4 py-2 border-r border-black">
                                                     <button
                                                         class="px-4 py-2 text-white bg-green-500 rounded openEditModal hover:bg-green-600"
                                                         data-id="{{$books->id}}"
@@ -152,16 +164,15 @@
                                                     >
                                                         Edit
                                                     </button>
-                                                    <form action="/delete/{{$books->id}}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button
-                                                            type="submit"
-                                                            class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </form>
+                                                    <button
+                                                        type="button"
+                                                        class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+                                                        id="openDeleteModal"
+                                                        data-id="{{$books->id}}"
+                                                    >
+                                                        Delete
+                                                    </button>
+
                                                     
                                                 </td>
 
@@ -181,8 +192,8 @@
     class="fixed inset-0 flex items-center justify-center hidden bg-black bg-opacity-50"
 >
     <div class="p-6 bg-white rounded-lg shadow-lg w-96">
-        <h2 class="mb-4 text-lg font-semibold">Return Book</h2>
-        <form id="returnForm" action="/add/admin/books" method="POST">
+        <h2 class="mb-4 text-lg font-semibold">Add Book</h2>
+        <form id="addForm" action="/add/admin/books" enctype="multipart/form-data" method="POST">
             @csrf
 
             <!-- Book Title -->
@@ -251,6 +262,15 @@
                     onchange="uploadImageToCloudinary(this)"
                 />
             </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Pdf</label>
+                <input
+                    type="file"
+                    id="pdfInputs"
+                    name="pdf"
+                    class="w-full px-3 py-2 border rounded"
+                />
+            </div>
             <div id="spinner" class="flex items-center justify-center hidden mt-4">
                 <div class="w-8 h-8 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
                 <span class="ml-2 text-blue-500">Uploading...</span>
@@ -276,6 +296,37 @@
         </form>
     </div>
 </div>
+<div
+    id="deleteConfirmationModal"
+    class="fixed inset-0 flex items-center justify-center hidden bg-black bg-opacity-50"
+>
+    <div class="p-6 bg-white rounded-lg shadow-lg w-96">
+        <h2 class="mb-4 text-lg font-semibold">Confirm Deletion</h2>
+        <p class="mb-4 text-gray-600">
+            Are you sure you want to delete this user? This action cannot be undone.
+        </p>
+        <form id="deleteUserForm" method="POST">
+            @csrf
+            @method('DELETE')
+            <div class="flex justify-end gap-4">
+                <button
+                    type="button"
+                    id="cancelDeleteButton"
+                    class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+                >
+                    Confirm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div
     id="editModal"
     class="fixed inset-0 flex items-center justify-center hidden bg-black bg-opacity-50"
@@ -364,6 +415,26 @@
 </div>
         </main>
         <script>
+                document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("deleteConfirmationModal");
+        const openDeleteButtons = document.querySelectorAll("#openDeleteModal");
+        const cancelDeleteButton = document.getElementById("cancelDeleteButton");
+        const deleteUserForm = document.getElementById("deleteUserForm");
+
+        // Open modal when delete button is clicked
+        openDeleteButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const userId = button.getAttribute("data-id");
+                deleteUserForm.action = `/delete/${userId}`;
+                modal.classList.remove("hidden");
+            });
+        });
+
+        // Close modal when cancel button is clicked
+        cancelDeleteButton.addEventListener("click", () => {
+            modal.classList.add("hidden");
+        });
+    });
              document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.see-more').forEach(button => {
             button.addEventListener('click', event => {

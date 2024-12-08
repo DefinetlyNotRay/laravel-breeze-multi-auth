@@ -31,13 +31,20 @@
                 </div>
             @else
                 <div class="w-[200px]">
-                    <div class="">
+                   <div class="px-5">
                         Guest (No Points)
                     </div>
                 </div>
             @endif
+            
             <!-- Home link, perfectly centered -->
             <div class="flex items-center gap-16 px-6 ">
+                <div class="relative">
+
+                    <a href="/admin/user" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">
+                        Users
+                    </a>
+                </div>
                 <div class="relative">
 
                 <a href="/books" class="mx-auto font-bold text-gray-800 text-md hover:text-gray-800/70 hover:text-gray-900">

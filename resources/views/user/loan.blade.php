@@ -11,6 +11,8 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
         <!-- Styles -->
+        <script src="//unpkg.com/alpinejs" defer></script>
+
         <style>
         </style>    
           @vite('resources/css/app.css')
@@ -31,7 +33,7 @@
                 </div>
             @else
                 <div class="w-[200px]">
-                    <div class="">
+                   <div class="px-5">
                         Guest (No Points)
                     </div>
                 </div>
@@ -100,90 +102,111 @@
                     <div class="flex flex-col items-center justify-center">
                         <h2 class="text-lg font-bold">Currently Loaning</h2>
                         @if($currentlyLoaning->isNotEmpty())
-                        <ul class="flex flex-col gap-5">
+                        <div class="flex gap-10">
+
                             @foreach ($currentlyLoaning as $loan)
-                            <a href="/loan/{{$loan->book->id}}">
-
-                                <img 
-                                    src="{{$loan->book->cover_img}}" 
-                                    class="shadow-2xl w-[200px] h-[300px] object-cover" 
-                                    alt="">
-                            </a>
-                            <div>
-                                <p class="text-sm font-bold">{{ $loan->book->title}}</p>
-                                <p class="text-xs font-semibold opacity-70">{{$loan->book->author}}</p>
-                                <p class="text-xs font-semibold opacity-70">Loan Date: {{$loan->tanggal_pinjam}}</p>
-                                <p class="text-xs font-semibold opacity-70">Due Date: {{$loan->tanggal_tenggat}}</p>
-                            </div>                            
+                            <ul class="flex flex-col gap-5">
+                                <a href="/loan/{{$loan->book->id}}">
+    
+                                    <img 
+                                        src="{{$loan->book->cover_img}}" 
+                                        class="shadow-2xl w-[200px] h-[300px] object-cover" 
+                                        alt="">
+                                </a>
+                                <div>
+                                    <p class="text-sm font-bold">{{ $loan->book->title}}</p>
+                                    <p class="text-xs font-semibold opacity-70">{{$loan->book->author}}</p>
+                                    <p class="text-xs font-semibold opacity-70">Loan Date: {{$loan->tanggal_pinjam}}</p>
+                                    <p class="text-xs font-semibold opacity-70">Due Date: {{$loan->tanggal_tenggat}}</p>
+                                </div>                            
+                                
+                            </ul>
                             @endforeach
-
-                        </ul>
-                        @else
-                        <div class="min-h-[352px] h-full flex flex-col justify-center items-center"> 
-
-                            <p>No loans</p>
-                        </div>
-                        @endif
-                        <div class="flex justify-center gap-20">
-                            <div class="flex flex-col gap-2">
-                                <h2 class="text-lg font-semibold">Past Loans</h2>
-                                @if($returnedBooks->isNotEmpty())
-                                <ul class="grid grid-cols-3 gap-5 min-w-[640px]">
-                                    @foreach ($returnedBooks as $loan)
-                                    <div class="flex flex-col">
-                                        <a href="/loan/{{$loan->book->id}}">
-            
-                                            <img 
-                                                src="{{$loan->book->cover_img}}" 
-                                                class="shadow-2xl w-[200px] h-[300px] object-cover" 
-                                                alt="">
-                                        </a>
-                                        <div>
-                                            <p class="text-sm font-bold">{{ $loan->book->title}}</p>
-                                            <p class="text-xs font-semibold opacity-70">{{$loan->book->author}}</p>
-                                            <p class="text-xs font-semibold opacity-70">Loan Date: {{$loan->tanggal_pinjam}}</p>
-                                            <p class="text-xs font-semibold opacity-70">Due Date: {{$loan->tanggal_tenggat}}</p>
-                                            <p class="text-xs font-semibold opacity-70">
-                                                Return Date: {{ $loan->returns->tanggal_pengembalian ?? 'Not Returned Yet' }}
-                                            </p>
-                                                                                    </div>                           
-                                    </div>
-                                     @endforeach
-                                </ul>
-                                @else
-                                <div class="min-w-[640px] h-full flex flex-col justify-center items-center">
-
-                                    <p>No returned books</p>
-                                </div>
-                                @endif
+                            @else
+                            <div class="min-h-[352px] h-full flex flex-col justify-center items-center"> 
+    
+                                <p>No loans</p>
                             </div>
-                            <div class="flex flex-col gap-2">
-                                <h2 class="text-lg font-semibold">Waiting to Be Picked Up</h2>
-                                <ul class="grid grid-cols-3 gap-5 min-w-[640px]">
-                                    @foreach ($waitingToBePickedUp as $loan)
-                                    <div class="flex flex-col">
-                                        <a href="/loan/{{$loan->book->id}}">
-            
-                                            <img 
-                                                src="{{$loan->book->cover_img}}" 
-                                                class="shadow-2xl w-[200px] h-[300px] object-cover" 
-                                                alt="">
-                                        </a>
-                                        <div>
-                                            <p class="text-sm font-bold">{{ $loan->book->title}}</p>
-                                            <p class="text-xs font-semibold opacity-70">{{$loan->book->author}}</p>
-                                            <p class="text-xs font-semibold opacity-70">Reserved on: {{$loan->tanggal_pinjam}}</p>
-                                        </div>
-                                    </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div x-data="{ showModal: null }" class="flex justify-start gap-20 mb-5">
+                        <div class="flex flex-col gap-2">
+                            <h2 class="text-lg font-semibold">Past Loans</h2>
+                            @if($pastLoans->isNotEmpty())
+                                <div class="flex gap-10">
+                                    @php
+                                        $groupedLoans = $pastLoans->groupBy('book.id');
+                                    @endphp
+                    
+                                    @foreach ($groupedLoans as $bookId => $loans)
+                                        <ul class="flex flex-col gap-5">
+                                            <!-- Trigger Popup -->
+                                            <div 
+                                                @click="showModal = {{ $bookId }}" 
+                                                class="cursor-pointer"
+                                            >
+                                                <img 
+                                                    src="{{ $loans->first()->book->cover_img }}" 
+                                                    class="shadow-2xl w-[200px] h-[300px] object-cover" 
+                                                    alt="{{ $loans->first()->book->title }}"
+                                                >
+                                                <div>
+                                                    <p class="text-sm font-bold">{{ $loans->first()->book->title }}</p>
+                                                    <p class="text-xs font-semibold opacity-70">{{ $loans->first()->book->author }}</p>
+                                                </div>
+                                            </div>
+                    
+                                            <!-- Modal -->
+                                            <div 
+                                                x-show="showModal === {{ $bookId }}" 
+                                                x-cloak 
+                                                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                            >
+                                                <div class="bg-white p-5 rounded-lg w-[400px]">
+                                                    <h3 class="mb-3 text-lg font-bold">{{ $loans->first()->book->title }}</h3>
+                                                    <p class="mb-3 text-sm font-semibold">{{ $loans->first()->book->author }}</p>
+                                                    <h4 class="text-sm font-semibold">Loan History:</h4>
+                                                    <ul class="text-sm">
+                                                        @foreach ($loans as $loan)
+                                                            <li class="mb-2">
+                                                                Loan Date: {{ $loan->tanggal_pinjam }} <br>
+                                                                Due Date: {{ $loan->tanggal_tenggat }}
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                    <button 
+                                                        @click="showModal = null"
+                                                        class="px-4 py-2 mt-5 text-white bg-red-500 rounded-md hover:bg-red-700"
+                                                    >
+                                                        Close
+                                                    </button>
+                                                    <a href="/loan/{{$loan->book->id}}"
+                                                        class="px-4 py-[0.6rem] mt-5 text-white bg-green-500 rounded-md hover:bg-green-700"
+                                                    >
+                                                        Loan
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </ul>
                                     @endforeach
-                                </ul>
-                            </div>
+                                </div>
+                            @else
+                                <div class="min-h-[352px] h-full flex flex-col justify-center items-center"> 
+                                    <p>No loans</p>
+                                </div>
+                            @endif
                         </div>
+                    </div>
+                    
+                    
+                    
+                        
                     </div>
                 </div>
             </div>
         </main>
-      
+
         <style>
             .active::after {
                 content: '';

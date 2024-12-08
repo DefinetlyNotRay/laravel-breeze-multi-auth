@@ -35,7 +35,22 @@ public function scopeCurrentlyLoaning($query, $userId)
                  ->where('tanggal_tenggat', '>=', now());
 }
 
-
-
+public function scopeReturned($query, $userId)
+{
+    return $query->where('id_user', $userId)
+                 ->where('tanggal_tenggat', '<', now())
+                 ->orderBy('id_loan', 'desc'); // Specify the column and direction
+}
+public function scopeReturns($query)
+{
+    return $query
+                 ->where('tanggal_tenggat', '<', now())
+                 ->orderBy('id_loan', 'desc'); // Specify the column and direction
+}
+public function scopeLoaning($query)
+{
+    return $query->where('tanggal_tenggat', '>=', now())
+                 ->orderBy('id_loan', 'desc'); // Specify the column and direction
+}
 
 }

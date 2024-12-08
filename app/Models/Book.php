@@ -18,7 +18,8 @@ class Book extends Model
         "status",
         "cover_img",
         "desc",
-        "total_loan"
+        "total_loan",
+        "pdf"
     ];
     public function category()
     {

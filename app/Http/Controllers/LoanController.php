@@ -15,9 +15,10 @@ class LoanController extends Controller
 
         // Get loans based on their status
         $currentlyLoaning = Loan::currentlyLoaning(userId: $userId->id)->with('book')->get();
-       
+        $pastLoans = Loan::returned(userId: $userId->id)->with('book')->get();
+
     
-        return view('user.loan', compact('currentlyLoaning', 'returnedBooks', 'waitingToBePickedUp'));
+        return view('user.loan', compact('currentlyLoaning','pastLoans'));
     }
     public function loan(Request $request){ 
         $user = Auth::user();

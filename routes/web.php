@@ -43,9 +43,23 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::post('/return',[AdminController::class, 'return']);
     Route::get('/admin/books',[AdminController::class, 'books']);
     Route::post('/add/admin/books',[AdminController::class, 'add']);
-    Route::delete('/delete/{id}', [AdminController::class, 'delete']);
+    Route::post('/add/admin/category',[AdminController::class, 'addCategory']);
+    Route::delete('/delete/category/{id}',   [AdminController::class, 'deleteCategory']);
+
+    Route::delete('/delete/{id}',  [AdminController::class, 'delete']);
     Route::post('/edit/admin/books', [AdminController::class, 'edit']);
+    Route::post('/edit/admin/user', [AdminController::class, 'editUser']);
+    Route::delete('/delete/user/{id}', [AdminController::class, 'deleteUser']);
+
+    Route::post('/add/admin/user', [AdminController::class, 'addUser']);
+
     Route::get('/admin/loans',[AdminController::class, 'loanPage']);
+    Route::delete('/edit/admin/category', [AdminController::class, 'editCategory']);
+    
+    Route::get('/admin/user',[AdminController::class, 'users']);
+
+    Route::get('/admin/kategori',[AdminController::class, 'kategori']);
+
 });;
 
 
