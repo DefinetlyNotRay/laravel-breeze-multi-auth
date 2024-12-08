@@ -24,7 +24,10 @@ class User extends Authenticatable
         'role',
         'points'
     ];
-
+    public function visits()
+    {
+        return $this->hasMany(Visit::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

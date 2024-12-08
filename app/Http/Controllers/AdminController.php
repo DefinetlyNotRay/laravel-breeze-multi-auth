@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Loan;
 use App\Models\User;
+use App\Models\Visit;
 use App\Models\Category;
 use App\Models\ReturnModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -32,13 +34,16 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
+        $today = Carbon::today();  // Gets today's date
+        $todayVisitsCount = Visit::whereDate('created_at', $today)->count();
+        $todayVisits = Visit::whereDate('created_at', $today)->get();
         $user = Auth::user();
         $book = Book::orderBy("total_loan", "desc")->get();
         $loan = Loan::Loaning()->with(relations: 'book')->get();
         $countLoan = Loan::loaning()->with('book')->whereDate('tanggal_pinjam', now()->toDateString())->count();        
         $booksReturned = Loan::Returns()->with(relations: 'book')->where('tanggal_tenggat', '=', now())->count();
 
-        return view('admin.dashboard', compact('user', 'book', 'loan','countLoan','booksReturned'));
+        return view('admin.dashboard', compact('todayVisitsCount','todayVisits','user', 'book', 'loan','countLoan','booksReturned'));
     }
     public function delete($id)
     {

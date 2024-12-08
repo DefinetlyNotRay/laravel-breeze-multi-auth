@@ -126,7 +126,7 @@
                                 <div class="">
                                     <h2 class="text-xl font-bold">Visitors</h2>
                                     <div class="bg-[#222222] shadow-2xl text-white p-5 w-[36rem] text-3xl py-14 rounded-md font-semibold">
-                                        <p>50 Books</p>
+                                        <p>{{ $todayVisitsCount }} Visits</p>
                                     </div>
                                 </div>
                             </div>
@@ -206,34 +206,30 @@
                                         <div class="flex items-end justify-between">
                                             <p class="text-3xl font-bold">Visitors</p>
                                             <input id="searchLoaned" class="search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
-                                            type="text" placeholder="Search Loaned Books">                                </div>
-                                        <div class="py-4 overflow-x-auto ">
-                                            <table class="border-collapse table-auto  w-[808px]" id="loanedTable">
+                                                   type="text" placeholder="Search Loaned Books">
+                                        </div>
+                                        <div class="py-4 overflow-x-auto">
+                                            <table class="border-collapse table-auto w-[808px]" id="loanedTable">
                                                 <thead class="text-white border border-black bg-[#2D2D2D]">
                                                     <tr>
                                                         <th class="px-4 py-2 text-left border-r border-black border-3">No</th>
-                                                        <th class="px-4 py-2 text-left border-r border-black border-3"colspan="2">User</th>
+                                                        <th class="px-4 py-2 text-left border-r border-black border-3" colspan="2">User</th>
                                                         <th class="px-4 py-2 text-left border-r border-black border-3">Time Stamp</th>
-                                                        
-        
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @php
-                                                        $no = 1
-                                                    @endphp
-                                                    <tr class="border border-b border-black hover:bg-gray-100">
-                                                        <td class="px-4 py-2 text-center border-r border-black center col-2">{{$no++}}</td>
-                                                        <td class="px-4 py-2 border-r border-black" colspan="2">Edgar Manuello</td>
-                                                        <td class="px-4 py-2 border-r border-black">2024-12-31 12:00:00</td>
-                                                          
-                                                        </td>
-                                                    </tr>
-                                                    
+                                                    @foreach ($todayVisits as $key => $visit)
+                                                        <tr class="border border-b border-black hover:bg-gray-100">
+                                                            <td class="px-4 py-2 text-center border-r border-black">{{ $key + 1 }}</td>
+                                                            <td class="px-4 py-2 border-r border-black" colspan="2">{{ $visit->user ? $visit->user->name : 'Guest' }}</td>
+                                                            <td class="px-4 py-2 border-r border-black">{{ $visit->created_at }}</td>
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
+                                    
                                 </div>   
                                 
                             </div>
