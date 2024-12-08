@@ -20,7 +20,7 @@ Schedule::call(function () {
 })->everyMinute(); // Adjust frequency as needed
 Schedule::call(function () {
     User::increment('points', 20); // Increment points for all users in one query
-})->daily();
+})->everyMinute();
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());

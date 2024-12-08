@@ -152,7 +152,7 @@
                                                 <td class="px-4 py-2 border-r border-black">{{$books->total_loan ?? 0}}</td>
                                                 <td class="flex flex-col gap-5 px-4 py-2 border-r border-black">
                                                     <button
-                                                        class="px-4 py-2 text-white bg-green-500 rounded openEditModal hover:bg-green-600"
+                                                        class="px-4 py-2 text-white bg-yellow-300 rounded hover:bg-yellow-400 openEditModal"
                                                         data-id="{{$books->id}}"
                                                         data-title="{{$books->title}}"
                                                         data-category="{{$books->id_category}}"

@@ -90,39 +90,65 @@
         </nav>
         <main>
             
-            <div class="flex justify-center gap-10 items-center h-[80vh]">
-                <img class="max-w-[340px]" src="{{$books->cover_img}}" alt="">
-                <div class="max-w-[80ch] h-full flex flex-col justify-center">
-
-                    <p class="text-xl font-bold">{{$books->title}}</p>
-                    <p class="text-sm font-semibold">{{$books->author}}</p>
-                    <p class="font-bold">{{$books->category->nama_category}}</p>
-                    <p class="text-sm">{{$books->desc   }}</p>
-                    @php
-                    
-                    @endphp
-                     @if (!in_array($books->id, $currentlyLoaningBooks))
-                     {{-- href="/loan/{{$books->id}}" --}}
-                     <button  
-                     class="text-xs mt-2 bg-[#01B14B] w-full text-center text-white hover:bg-[#01B14B]/70 transition-all duration-300 py-1 px-4"
-                     onclick="openLoanModal({{ $books->id }}, '{{ $books->title }}')"
-                 >
-                     Loan
-                 </button>
-                 
-                     @else
-                     <!-- Tombol Tidak Aktif -->
-                     <button
-                     class="w-full px-4 py-1 mt-2 text-xs text-center text-white bg-[#01B14B]"
-                     onclick="openPdfModal('/storage/pdfs/{{$books->pdf}}')"
+            <div class="flex flex-col justify-center gap-10 ">
+                <div class="flex items-center justify-center gap-10 h-[80vh]">
+                    <img class="max-w-[340px]" src="{{$books->cover_img}}" alt="">
+                    <div class="max-w-[80ch] h-full flex flex-col justify-center">
+    
+                        <p class="text-xl font-bold">{{$books->title}}</p>
+                        <p class="text-sm font-semibold">{{$books->author}}</p>
+                        <p class="font-bold">{{$books->category->nama_category}}</p>
+                        <p class="text-sm">{{$books->desc   }}</p>
+                        @php
+                        
+                        @endphp
+                         @if (!in_array($books->id, $currentlyLoaningBooks))
+                         {{-- href="/loan/{{$books->id}}" --}}
+                         <button  
+                         class="text-xs mt-2 bg-[#01B14B] w-full text-center text-white hover:bg-[#01B14B]/70 transition-all duration-300 py-1 px-4"
+                         onclick="openLoanModal({{ $books->id }}, '{{ $books->title }}')"
                      >
-                     Read
-                 </button>
-                     @endif
-                    
+                         Loan
+                     </button>
+                     
+                         @else
+                         <!-- Tombol Tidak Aktif -->
+                         <button
+                         class="w-full px-4 py-1 mt-2 text-xs text-center text-white bg-[#01B14B]"
+                         onclick="openPdfModal('/storage/pdfs/{{$books->pdf}}')"
+                         >
+                         Read
+                     </button>
+                         @endif
+                        
+                    </div>
                 </div>
-
+                <div class="ml-[26rem] mb-10">
+                    <div class="flex flex-col gap-4">
+                        <div class="flex justify-start">
+                            <p class="text-xl font-semibold">Comments</p>
+                        </div>
+                        <!-- Dummy Comments -->
+                        <div class="flex flex-col gap-2 w-[1100px]">
+                            <div class="p-3 bg-gray-100 rounded">
+                                <p class="text-sm font-semibold">John Doe:</p>
+                                <p class="text-sm">Great book! Highly recommended.</p>
+                            </div>
+                            <div class="p-3 bg-gray-100 rounded">
+                                <p class="text-sm font-semibold">Jane Smith:</p>
+                                <p class="text-sm">Loved the story, very engaging!</p>
+                            </div>
+                            <div class="p-3 bg-gray-100 rounded">
+                                <p class="text-sm font-semibold">Alex Johnson:</p>
+                                <p class="text-sm">Informative and well-written.</p>
+                            </div>
+                        </div>
+                        <!-- Add Comment Form -->
+                       
+                    </div>
+                </div>
             </div>
+          
         </main>
         <!-- PDF Modal -->
 <div
@@ -162,6 +188,7 @@ class="fixed inset-0 flex items-center justify-center hidden bg-black bg-opacity
             </button>
         </div>
     </div>
+    <
 </div>
 </div>
         <div

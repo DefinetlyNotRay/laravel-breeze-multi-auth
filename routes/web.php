@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\NoCacheHeaders;
+use App\Http\Middleware\LogVisit;
+
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\UserController;
@@ -22,7 +24,7 @@ Route::middleware('auth')->group(function () {
     
     
 });
-// Route::middleware([NoCacheHeaders::class])->group(function () {
+Route::middleware([NoCacheHeaders::class,LogVisit::class])->group(function () {
     Route::get('/loan/{id}', [BooksController::class, 'loan'])->name('books.loan');
     Route::get('/books', [BooksController::class,'index']);
     Route::get('/books/{category}', [BooksController::class,'category']);
@@ -36,8 +38,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/loans/{id}', [LoanController::class, 'loan'])->name('loans.loan');
 
     });
-// });
-Route::middleware(['auth', 'role:admin'])->group(function(){
+});
+Route::middleware(['auth', 'role:admin',NoCacheHeaders::class,LogVisit::class])->group(function(){
     Route::get( '/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post( '/pickedup/{id}', [AdminController::class, 'pickedup']);
     Route::post('/return',[AdminController::class, 'return']);

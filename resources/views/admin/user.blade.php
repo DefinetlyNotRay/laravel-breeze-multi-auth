@@ -149,7 +149,7 @@
                                                 <td class="px-4 py-2 border-r border-black">{{$users->password}}</td>
                                                 <td class="flex justify-center gap-5 px-4 py-2 border-r border-black">
                                                     <button
-                                                        class="px-4 py-2 text-white bg-green-500 rounded openEditModal hover:bg-green-600"
+                                                        class="px-4 py-2 text-white bg-yellow-300 rounded openEditModal hover:bg-yellow-400"
                                                         data-id="{{$users->id}}"
 
                                                         data-name="{{$users->name}}"

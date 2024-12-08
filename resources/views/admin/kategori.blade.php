@@ -113,7 +113,7 @@
                                     <div class="flex items-end justify-between">
                                         <div class="flex items-end gap-4">
                                             <div class="flex flex-col">
-                                                <p class="text-3xl font-bold">Loans</p>
+                                                <p class="text-3xl font-bold">Category</p>
                                                 <div class="flex gap-5">
                                                     
                                                     <div class="">
@@ -154,7 +154,7 @@
                                                 <td class="px-4 py-2 border-r border-black" colspan="2">{{$category->nama_category}}</td>
                                                 <td class="flex justify-center gap-5 px-4 py-2 border-r border-black">
                                                     <button
-                                                        class="px-4 py-2 text-white bg-green-500 rounded openEditModal hover:bg-green-600"
+                                                        class="px-4 py-2 text-white bg-yellow-300 rounded hover:bg-yellow-400 openEditModal "
                                                         data-id="{{$category->id_category}}"
                                                         data-title="{{$category->nama_category}}"
 
