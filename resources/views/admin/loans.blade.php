@@ -139,7 +139,12 @@
                                                 class="mb-2 search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
                                                 type="date">
                                             </div>
-                                           
+                                            <div class="">
+                                                <p>Date-2</p>
+                                                <input         id="dateFilter2" 
+                                                class="mb-2 search-input w-[14rem] border-none text-black font-semibold bg-[#D9D9D9] px-2 text-sm h-6" 
+                                                type="date">
+                                            </div>
                                         </div>
                                         <button
                                         id="printButton"
@@ -161,7 +166,7 @@
                                                 <th class="px-4 py-2 text-left border-r border-black border-3">Status</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="tableBody">
                                             @php
                                                 $no = 1
                                             @endphp
@@ -172,8 +177,8 @@
                                                 <td class="px-4 py-2 border-r border-black">
                                                     {{ $loans->book->title }}
                                                 </td>
-                                                <td class="px-4 py-2 border-r border-black" >{{$loans->tanggal_pinjam}}</td>
-                                                <td class="px-4 py-2 border-r border-black">{{$loans->tanggal_tenggat}}</td>
+                                                <td class="px-4 py-2 border-r border-black" data-date="{{ $loans->tanggal_pinjam }}">{{$loans->tanggal_pinjam}}</td>
+                                                <td class="px-4 py-2 border-r border-black" >{{$loans->tanggal_tenggat}}</td>
                                                 <td class="px-4 py-2 border-r border-black">
                                                     {{ $loans->status }}
                                                 </td>
@@ -198,6 +203,25 @@
 <!-- Include jsPDF AutoTable plugin -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js" integrity="sha512-PRJxIx+FR3gPzyBBl9cPt62DD7owFXVcfYv0CRNFAcLZeEYfht/PpPNTKHicPs+hQlULFhH2tTWdoxnd1UGu1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
+       document.getElementById("dateFilter").addEventListener("change", filterTable);
+    document.getElementById("dateFilter2").addEventListener("change", filterTable);
+
+    function filterTable() {
+        const date1 = document.getElementById("dateFilter").value;
+        const date2 = document.getElementById("dateFilter2").value;
+        const rows = document.querySelectorAll("#tableBody tr");
+
+        rows.forEach(row => {
+            const tanggalPinjam = row.querySelector('[data-date]').getAttribute('data-date');
+
+            // Show the row if it falls within the date range
+            if (tanggalPinjam >= date1 && tanggalPinjam <= date2) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
   // Wait for the entire window to load to ensure all resources are loaded
   window.onload = function() {
     document.getElementById('printButton').addEventListener('click', function() {
